@@ -2590,12 +2590,37 @@ window.addEventListener('click', function(event) {
  * Handles loading, error, and success states for parent dashboard
  */
 const ParentPortalController = {
-    
+
     // UI State trackers
     uiState: {
         isLoading: false,
         error: null,
         activeRequest: null
+    },
+
+    getOverlay(container, createIfMissing = true) {
+        if (!container) return null;
+
+        let overlay = container.querySelector('.parent-panel-overlay');
+        if (!overlay && createIfMissing) {
+            overlay = document.createElement('div');
+            overlay.className = 'parent-panel-overlay';
+            overlay.setAttribute('hidden', '');
+            container.prepend(overlay);
+        }
+
+        return overlay;
+    },
+
+    hideOverlay(container) {
+        const overlay = this.getOverlay(container, false);
+        if (!overlay) return;
+
+        overlay.innerHTML = '';
+        overlay.hidden = true;
+        container.classList.remove('state-loading', 'state-error');
+        this.uiState.isLoading = false;
+        this.uiState.error = null;
     },
 
     /**
@@ -2605,16 +2630,21 @@ const ParentPortalController = {
      */
     showLoadingState(container, message = 'Loading...') {
         if (!container) return;
-        
+
+        const overlay = this.getOverlay(container);
+        if (!overlay) return;
+
         const loadingHTML = `
-            <div class="parent-loading-state" aria-live="polite" aria-busy="true">
+            <div class="parent-loading-state" role="status" aria-busy="true">
                 <div class="loading-spinner"></div>
                 <p class="loading-message">${message}</p>
             </div>
         `;
-        
-        container.innerHTML = loadingHTML;
+
+        overlay.innerHTML = loadingHTML;
+        overlay.hidden = false;
         container.classList.add('state-loading');
+        container.classList.remove('state-error');
         this.uiState.isLoading = true;
     },
 
@@ -2627,24 +2657,28 @@ const ParentPortalController = {
      */
     showErrorState(container, title = 'Error', message = 'Something went wrong', onRetry = null) {
         if (!container) return;
-        
-        const retryButton = onRetry 
-            ? `<button class="btn btn-secondary" onclick="arguments[0].target.onclick.call(this)">Retry</button>`
+
+        const overlay = this.getOverlay(container);
+        if (!overlay) return;
+
+        const retryButton = onRetry
+            ? '<button type="button" class="btn btn-secondary" data-parent-overlay-retry>Retry</button>'
             : '';
-        
+
         const errorHTML = `
-            <div class="parent-error-state" aria-live="assertive" role="alert">
+            <div class="parent-error-state" role="alert">
                 <div class="error-icon">⚠️</div>
                 <h4>${title}</h4>
                 <p>${message}</p>
                 <div class="error-actions">
                     ${retryButton}
-                    <button class="btn btn-secondary" onclick="document.getElementById('parent-panel-wrapper').innerHTML = ''; ParentPortalController.showDefaultState(); return false;">Close</button>
+                    <button type="button" class="btn btn-secondary" data-parent-overlay-close>Close</button>
                 </div>
             </div>
         `;
-        
-        container.innerHTML = errorHTML;
+
+        overlay.innerHTML = errorHTML;
+        overlay.hidden = false;
         container.classList.add('state-error');
         container.classList.remove('state-loading');
         this.uiState.isLoading = false;
@@ -2652,10 +2686,21 @@ const ParentPortalController = {
 
         // Attach retry handler if provided
         if (onRetry) {
-            const retryBtn = container.querySelector('.btn-secondary:first-child');
+            const retryBtn = overlay.querySelector('[data-parent-overlay-retry]');
             if (retryBtn) {
-                retryBtn.onclick = onRetry;
+                retryBtn.addEventListener('click', event => {
+                    event.preventDefault();
+                    onRetry();
+                });
             }
+        }
+
+        const closeBtn = overlay.querySelector('[data-parent-overlay-close]');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', event => {
+                event.preventDefault();
+                this.showDefaultState();
+            });
         }
     },
 
@@ -2665,10 +2710,8 @@ const ParentPortalController = {
     showDefaultState() {
         const wrapper = document.getElementById('parent-panel-wrapper');
         if (!wrapper) return;
-        
-        wrapper.classList.remove('state-loading', 'state-error');
-        this.uiState.isLoading = false;
-        this.uiState.error = null;
+
+        this.hideOverlay(wrapper);
         resetParentPanel();
     },
 
@@ -2692,7 +2735,7 @@ const ParentPortalController = {
                 throw new Error(response.error || 'Failed to load dashboard');
             }
 
-            wrapper.classList.remove('state-loading');
+            this.hideOverlay(wrapper);
             return response.data;
         } catch (error) {
             console.error('Dashboard fetch error:', error);

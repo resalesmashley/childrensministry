@@ -2531,6 +2531,19 @@ tr:hover {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+}
+.parent-panel-wrapper {
+    margin-top: 3rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 45px rgba(31, 60, 90, 0.18);
+    padding: 2.5rem;
+    border: 1px solid rgba(44, 95, 141, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
 }
 
@@ -2900,6 +2913,24 @@ tr:hover {
     pointer-events: auto;
     opacity: 1;
     filter: none;
+}
+
+.parent-panel-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(2px);
+    border-radius: inherit;
+    z-index: 10;
+    text-align: center;
+}
+
+.parent-panel-overlay[hidden] {
+    display: none;
 }
 
 .parent-loading-state {
