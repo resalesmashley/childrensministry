@@ -483,12 +483,9 @@
                             <p><strong>Demo Credentials:</strong></p>
                             <p>Email: <code id="parent-demo-email">parent@demo.com</code></p>
                             <p>Password: <code id="parent-demo-password">Parent2025!</code></p>
-                            <p>Class Code: <code id="parent-demo-code">PREK-A</code></p>
                         </div>
-                        <div class="parent-class-access" aria-live="polite">
-                            <h3>Class Access Codes</h3>
-                            <p id="parent-login-announcement">Use your classroom access code to log in and view updates.</p>
-                            <ul id="parent-class-codes-list" class="parent-class-code-list"></ul>
+                        <div class="parent-login-help" aria-live="polite">
+                            <p id="parent-login-announcement">Sign in with your email and password to access your family's dashboard.</p>
                         </div>
 
                         <form id="parent-login-form" onsubmit="handleParentLogin(event)">
@@ -499,10 +496,6 @@
                             <div class="form-group">
                                 <label for="parent-password">Password *</label>
                                 <input type="password" id="parent-password" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="parent-code">Class Access Code *</label>
-                                <input type="text" id="parent-code" required>
                             </div>
                             <button type="submit" class="btn">Login to Portal</button>
                         </form>

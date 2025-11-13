@@ -2506,48 +2506,19 @@ tr:hover {
 }
 
 /* Parent Portal Panels */
-.parent-class-access {
+.parent-login-help {
     margin-top: 2.5rem;
     background: #f7fbff;
     border: 1px solid rgba(44, 95, 141, 0.16);
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 12px 24px rgba(31, 60, 90, 0.12);
-}
-
-.parent-class-access h3 {
-    font-family: 'Abril Fatface', serif;
-    color: var(--primary-blue);
-    margin-bottom: 0.5rem;
-}
-
-.parent-class-access p {
     color: #5d6d7e;
-    margin-bottom: 1rem;
+    font-size: 0.95rem;
 }
 
-.parent-class-code-list {
-    list-style: none;
-    padding: 0;
+.parent-login-help p {
     margin: 0;
-    display: grid;
-    gap: 0.75rem;
-}
-
-.parent-class-code-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    border: 1px solid rgba(44, 95, 141, 0.18);
-    border-radius: 10px;
-    padding: 0.85rem 1.1rem;
-    box-shadow: 0 8px 18px rgba(31, 60, 90, 0.12);
-}
-
-.parent-class-code-list li span {
-    font-weight: 600;
-    color: var(--primary-blue);
 }
 
 .parent-panel-wrapper {

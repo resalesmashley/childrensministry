@@ -812,11 +812,10 @@ function handleParentLogin(event) {
     
     const email = document.getElementById('parent-email').value;
     const password = document.getElementById('parent-password').value;
-    const classCode = document.getElementById('parent-code').value;
-    
+
     const account = findParentAccountByEmail(email);
 
-    if (account && password === account.password && classCode === getClassById(account.classId)?.accessCode) {
+    if (account && password === account.password) {
         currentUser = {
             type: 'parent',
             loggedIn: true,
@@ -831,7 +830,7 @@ function handleParentLogin(event) {
             updateParentViewAfterLogin();
         }, 100);
     } else {
-        alert('Invalid credentials. Please check email, password, and class code.');
+        alert('Invalid credentials. Please check your email and password.');
     }
 }
 
@@ -2250,11 +2249,11 @@ function formatParentLoginAnnouncement() {
     const accounts = getAllParentAccounts();
     const latest = accounts[0];
     if (!latest) {
-        return 'Use your classroom access code to log in and view updates.';
+        return 'Sign in with your email and password to access family updates.';
     }
 
     const classroom = getClassById(latest.classId);
-    return `${latest.name} added for ${classroom?.displayName || latest.classId} • Access code: ${latest.accessCode}`;
+    return `${latest.name} connected for ${classroom?.displayName || latest.classId}.`;
 }
 
 function renderClassCodesList() {
