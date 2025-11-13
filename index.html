@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="author" content="Bengal Christian Church"/>
+    <title>BCC Children's Ministry | Ministries | Bengal Christian Church</title>
+    <meta name="robots" content="index,follow" />
+    <link href="https://dq5pwpg1q8ru0.cloudfront.net/2022/03/21/12/31/56/6c9db52e-f399-4c81-a705-4ac025bc98cf/Website-Favicon-Color%25404x.png" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface:regular,700|Arvo:regular,italic,700,700italic&display=swap" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="demo-credentials-banner" style="background: #fff3cd; border-bottom: 3px solid #ffc107; padding: 1rem; text-align: center; font-size: 0.9rem;">
+        <strong>🔐 DEMO LOGIN CREDENTIALS:</strong> 
+        <span style="margin: 0 1rem;">Parent: <strong>parent@demo.com</strong> / <strong>Parent2025!</strong></span> | 
+        <span style="margin: 0 1rem;">Teacher: <strong>teacher@demo.com</strong> / <strong>Teacher2025!</strong></span> | 
+        <span style="margin: 0 1rem;">Admin: <strong>admin@demo.com</strong> / <strong>Admin2025!</strong></span>
+        <button onclick="document.getElementById('demo-credentials-banner').style.display='none'" style="margin-left: 1rem; padding: 0.25rem 0.75rem; cursor: pointer;">Hide</button>
+    </div>
+
+    <nav id="main_menu">
+        <div class="bg-default"></div>
+        <div class="container">
+            <a class="main-menu-logo" href="https://www.bengalchristianchurch.org/">
+                <img alt="Bengal Christian Church" src="https://dq5pwpg1q8ru0.cloudfront.net/2022/03/21/12/51/17/b67e1554-bbc9-4b6f-b38a-90575a0b3dfa/Website-Color-Horizontal%25406x.png" />
+            </a>
+            <button type="button" class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle Main Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="white">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+                </svg>
+                Menu
+            </button>
+            <ul class="main-menu-list" id="mainMenuList">
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/">Home</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/about">About</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/events">Events</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/ministries">Ministries</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/media">Sermons</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/contact">Contact</a></li>
+                <li class="menu-item"><a class="menu-link" href="https://www.bengalchristianchurch.org/give">Give</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="header" style="background-image:url('https://dq5pwpg1q8ru0.cloudfront.net/2023/06/26/07/27/53/f388b1ad-bf28-4e16-9254-ad0aa132667e/BCC-Children%2527s-Ministry-%25281%2529.jpg');">
+        <div id="page-header-overlay"></div>
+        <div class="container">
+            <div style="margin-top: auto;">
+                <h1 class="header-heading">BCC Children's Ministry</h1>
+                <div class="header-subheading">Ages 3 to 11</div>
+            </div>
+            <div style="margin-left: auto; margin-top: auto; padding-left: 1.5rem;">
+                <ol class="header-breadcrumb">
+                    <li><a href="https://www.bengalchristianchurch.org/ministries">Ministries</a></li>
+                    <li class="active" id="breadcrumbCurrent">BCC Children's Ministry</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <main role="main">
+        <div id="page_content">
+            <div class="container">
+                <div class="sub-nav">
+                    <ul>
+                        <li><a href="#" onclick="showPage('home'); return false;" class="active" id="nav-home">Overview</a></li>
+                        <li><a href="#" onclick="showPage('about'); return false;" id="nav-about">About Us</a></li>
+                        <li><a href="#" onclick="showPage('staff'); return false;" id="nav-staff">Our Team</a></li>
+                        <li><a href="#" onclick="showPage('prek'); return false;" id="nav-prek">Pre-K</a></li>
+                        <li><a href="#" onclick="showPage('elementary'); return false;" id="nav-elementary">Elementary</a></li>
+                        <li><a href="#" onclick="showPage('events'); return false;" id="nav-events">Events</a></li>
+                        <li><a href="#" onclick="showPage('volunteer'); return false;" id="nav-volunteer">Volunteer</a></li>
+                        <li><a href="#" onclick="showPage('resources'); return false;" id="nav-resources">Resources</a></li>
+                        <li><a href="#" onclick="showPage('gallery'); return false;" id="nav-gallery">Gallery</a></li>
+                        <li><a href="#" onclick="showPage('portals'); return false;" id="nav-portals">Portals</a></li>
+                        <li><a href="#" onclick="showPage('contact'); return false;" id="nav-contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div id="home-page" class="page-visible">
+                    <section class="overview-tiles">
+                        <article class="overview-nav-card">
+                            <h3>About Us</h3>
+                            <p>Learn how our small church nurtures kids in faith and friendship.</p>
+                            <a href="#" onclick="showPage('about'); return false;" class="overview-link">Explore About Us</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Our Team</h3>
+                            <p>Meet the volunteers and staff who welcome every child by name.</p>
+                            <a href="#" onclick="showPage('staff'); return false;" class="overview-link">Meet the Team</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Pre-K</h3>
+                            <p>Story time, music, and crafts designed just for ages 3-5.</p>
+                            <a href="#" onclick="showPage('prek'); return false;" class="overview-link">See Pre-K</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Elementary</h3>
+                            <p>Interactive lessons and small groups for grades K-5.</p>
+                            <a href="#" onclick="showPage('elementary'); return false;" class="overview-link">Visit Elementary</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Events</h3>
+                            <p>Keep up with the next simple gatherings for our families.</p>
+                            <a href="#" onclick="showPage('events'); return false;" class="overview-link">Upcoming Events</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Volunteer</h3>
+                            <p>See how easy it is to join the rotation and support our kids.</p>
+                            <a href="#" onclick="showPage('volunteer'); return false;" class="overview-link">Serve with Us</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Resources</h3>
+                            <p>Grab conversation starters, lesson recaps, and home activities.</p>
+                            <a href="#" onclick="showPage('resources'); return false;" class="overview-link">Parent Resources</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Portals</h3>
+                            <p>Log into the Parent or Teacher Portal for secure updates.</p>
+                            <a href="#" onclick="showPage('portals'); return false;" class="overview-link">Access Portals</a>
+                        </article>
+
+                        <article class="overview-nav-card">
+                            <h3>Contact</h3>
+                            <p>Reach out with questions—we’d love to hear from you.</p>
+                            <a href="#" onclick="showPage('contact'); return false;" class="overview-link">Contact Us</a>
+                        </article>
+                    </section>
+                </div>
+
+                <div id="about-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>About BCC Children's Ministry</h2>
+                        <p>The Children's Ministry at Bengal Christian Church is dedicated to partnering with parents to help children develop a genuine, life-long relationship with Jesus Christ.</p>
+                        
+                        <h3>Our Mission</h3>
+                        <p>To create a safe, nurturing environment where children can:</p>
+                        <ul>
+                            <li>Learn about God's love through engaging, age-appropriate lessons</li>
+                            <li>Experience authentic worship and prayer</li>
+                            <li>Build meaningful relationships with peers and mentors</li>
+                            <li>Develop character and biblical values</li>
+                            <li>Discover and use their God-given gifts and talents</li>
+                        </ul>
+
+                        <h3>Our Vision</h3>
+                        <p>We envision a generation of children who know Jesus personally, understand the Bible, and live out their faith with confidence and joy in every area of their lives.</p>
+
+                        <h3>Core Values</h3>
+                        <ul>
+                            <li><strong>Bible-Centered:</strong> God's Word is the foundation of everything we teach</li>
+                            <li><strong>Grace-Filled:</strong> We extend love, acceptance, and forgiveness to all children</li>
+                            <li><strong>Fun & Engaging:</strong> Learning about Jesus should be exciting and memorable</li>
+                            <li><strong>Safe & Secure:</strong> We maintain the highest standards of child safety and protection</li>
+                            <li><strong>Family Partnership:</strong> We support and equip parents as the primary spiritual leaders</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="staff-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Meet Our Team</h2>
+                        <p>Our dedicated staff and volunteers are passionate about helping children grow in their faith.</p>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-icon">👨‍💼</div>
+                            <h3>Pastor David Johnson</h3>
+                            <p><strong>Children's Ministry Director</strong></p>
+                            <p>Pastor David has over 15 years of experience in children's ministry and holds a Master's degree in Christian Education.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">👩‍💼</div>
+                            <h3>Sarah Martinez</h3>
+                            <p><strong>Pre-K Coordinator</strong></p>
+                            <p>Sarah has a background in early childhood education and has been serving in children's ministry for 8 years.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">👨‍🏫</div>
+                            <h3>Mike Thompson</h3>
+                            <p><strong>Elementary Coordinator</strong></p>
+                            <p>Mike brings energy and creativity to elementary ministry with his background as an elementary school teacher.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">👩‍🏫</div>
+                            <h3>Emily Chen</h3>
+                            <p><strong>Volunteer Coordinator</strong></p>
+                            <p>Emily recruits, trains, and supports our amazing team of volunteers.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="prek-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Pre-K Ministry (Ages 3-5)</h2>
+                        <p>Our Pre-K program provides a safe, loving environment where young children can learn about Jesus through play, stories, songs, and activities.</p>
+                        <h3>What We Teach</h3>
+                        <ul>
+                            <li>God made me and loves me</li>
+                            <li>Jesus is my friend</li>
+                            <li>The Bible is God's special book</li>
+                            <li>I can talk to God through prayer</li>
+                            <li>God wants me to love others</li>
+                        </ul>
+                        <h3>Sunday Schedule</h3>
+                        <table>
+                            <tr><th>Time</th><th>Activity</th></tr>
+                            <tr><td>9:00-9:15 AM</td><td>Welcome & Free Play</td></tr>
+                            <tr><td>9:15-9:30 AM</td><td>Worship & Music</td></tr>
+                            <tr><td>9:30-9:50 AM</td><td>Bible Story Time</td></tr>
+                            <tr><td>9:50-10:10 AM</td><td>Craft & Activity</td></tr>
+                            <tr><td>10:10-10:30 AM</td><td>Snack & Small Group</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="elementary-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Elementary Ministry (Grades K-5)</h2>
+                        <p>Our Elementary program helps kids dive deeper into God's Word through interactive lessons, small groups, and hands-on activities.</p>
+                        <h3>Age Groups</h3>
+                        <ul>
+                            <li><strong>Kindergarten-2nd Grade:</strong> Focus on Bible stories and basic biblical principles</li>
+                            <li><strong>3rd-5th Grade:</strong> Deeper study of Scripture with application to daily life challenges</li>
+                        </ul>
+                        <h3>Sunday Schedule</h3>
+                        <table>
+                            <tr><th>Time</th><th>Activity</th></tr>
+                            <tr><td>9:00-9:15 AM</td><td>Check-in & Games</td></tr>
+                            <tr><td>9:15-9:30 AM</td><td>Large Group Worship</td></tr>
+                            <tr><td>9:30-9:50 AM</td><td>Bible Lesson</td></tr>
+                            <tr><td>9:50-10:20 AM</td><td>Small Group Discussion</td></tr>
+                            <tr><td>10:20-10:30 AM</td><td>Wrap-up & Prayer</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="events-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Events & Activities</h2>
+                        <div class="event-item">
+                            <div class="event-date">November 10, 2025 | 3:00-6:00 PM</div>
+                            <h3>Fall Festival</h3>
+                            <p><strong>Location:</strong> Church Parking Lot & Gymnasium</p>
+                            <ul>
+                                <li>Carnival games with prizes</li>
+                                <li>Face painting and hayrides</li>
+                                <li>Pumpkin decorating</li>
+                            </ul>
+                            <a href="#" class="btn register-btn" data-event-name="Fall Festival">Register Now</a>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">November 24, 2025 | 10:00 AM-12:00 PM</div>
+                            <h3>Thanksgiving Service Project</h3>
+                            <p>Children will assemble care packages for local families in need.</p>
+                            <a href="#" class="btn register-btn" data-event-name="Thanksgiving Service Project">Register Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="volunteer-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Volunteer Opportunities</h2>
+                        <p>Whether you can serve weekly or once a month, there's a place for you on our team.</p>
+                    </div>
+                    <div class="card-grid volunteer-role-grid" id="volunteer-role-grid" aria-live="polite"></div>
+                </div>
+
+                <div id="teacher-photo-modal" class="modal teacher-photo-modal" role="dialog" aria-modal="true" aria-labelledby="teacher-photo-modal-title" aria-hidden="true">
+                    <div class="modal-content teacher-photo-modal-content" role="document">
+                        <div class="modal-header teacher-photo-modal-header">
+                            <div>
+                                <h3 id="teacher-photo-modal-title">Upload Classroom Photos</h3>
+                                <p class="teacher-photo-modal-subtitle">Add photos, captions, and privacy settings before sharing with parents.</p>
+                            </div>
+                            <button type="button" class="btn-icon" id="teacher-photo-modal-close" aria-label="Close upload modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form id="teacher-photo-form" class="teacher-photo-form" novalidate>
+                            <div class="teacher-photo-body">
+                                <div class="teacher-photo-upload">
+                                    <label for="teacher-photo-input" class="teacher-photo-dropzone" id="teacher-photo-dropzone">
+                                        <input type="file" id="teacher-photo-input" accept="image/*" multiple hidden>
+                                        <div class="teacher-photo-dropzone-content">
+                                            <span class="dropzone-icon">📷</span>
+                                            <p><strong>Drag & drop photos</strong> or click to browse</p>
+                                            <small>JPG or PNG up to 10MB each • Add up to 8 photos per upload</small>
+                                        </div>
+                                    </label>
+                                    <div id="teacher-photo-errors" class="teacher-photo-errors" aria-live="polite"></div>
+                                </div>
+
+                                <div class="teacher-photo-preview" id="teacher-photo-preview" aria-live="polite"></div>
+
+                                <div class="teacher-photo-options">
+                                    <div class="form-group">
+                                        <label for="teacher-photo-class">Share with class *</label>
+                                        <select id="teacher-photo-class" required>
+                                            <option value="">Select classroom</option>
+                                            <option value="prek-a">Pre-K Room A</option>
+                                            <option value="prek-b">Pre-K Room B</option>
+                                            <option value="elem-1">Elementary Grades 1-2</option>
+                                            <option value="elem-3">Elementary Grades 3-5</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="teacher-photo-notes">Caption / Highlights</label>
+                                        <textarea id="teacher-photo-notes" rows="3" placeholder="Add a caption or describe the activity."></textarea>
+                                    </div>
+                                    <div class="form-group teacher-photo-toggles">
+                                        <label>
+                                            <input type="checkbox" id="teacher-photo-featured">
+                                            Feature in parent newsletter
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" id="teacher-photo-notify" checked>
+                                            Notify parents when published
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="teacher-photo-actions">
+                                <button type="submit" class="btn">Publish to Gallery</button>
+                                <button type="button" class="btn btn-secondary" id="teacher-photo-save-draft">Save as Draft</button>
+                                <button type="button" class="btn-link" id="teacher-photo-modal-cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="volunteer-application-modal" class="modal volunteer-modal" role="dialog" aria-modal="true" aria-labelledby="volunteer-modal-title" aria-hidden="true">
+                    <div class="modal-content volunteer-modal-content" role="document">
+                        <div class="modal-header volunteer-modal-header">
+                            <div>
+                                <h3 id="volunteer-modal-title">Apply to Serve</h3>
+                                <p id="volunteer-modal-role" class="volunteer-modal-subtitle"></p>
+                            </div>
+                            <button type="button" class="btn-icon" id="volunteer-modal-close" aria-label="Close volunteer application">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form id="volunteer-application-form" class="volunteer-form" novalidate>
+                            <div class="volunteer-form-body">
+                                <div class="volunteer-form-grid">
+                                    <div class="form-group">
+                                        <label for="volunteer-name">Full Name *</label>
+                                        <input type="text" id="volunteer-name" name="name" autocomplete="name" required>
+                                        <span class="form-error" data-error-for="volunteer-name"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="volunteer-email">Email Address *</label>
+                                        <input type="email" id="volunteer-email" name="email" autocomplete="email" required>
+                                        <span class="form-error" data-error-for="volunteer-email"></span>
+                                    </div>
+                                </div>
+                                <div class="volunteer-form-grid">
+                                    <div class="form-group">
+                                        <label for="volunteer-phone">Phone Number</label>
+                                        <input type="tel" id="volunteer-phone" name="phone" autocomplete="tel">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="volunteer-availability">Availability *</label>
+                                        <select id="volunteer-availability" name="availability" required>
+                                            <option value="">Select your frequency</option>
+                                            <option value="Every Sunday">Every Sunday</option>
+                                            <option value="Twice per month">Twice per month</option>
+                                            <option value="Once per month">Once per month</option>
+                                            <option value="Seasonal">Seasonal / Special Events</option>
+                                        </select>
+                                        <span class="form-error" data-error-for="volunteer-availability"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="volunteer-comments">Tell us about your experience</label>
+                                    <textarea id="volunteer-comments" name="comments" rows="4" placeholder="Share any teaching experience, certifications, or questions."></textarea>
+                                </div>
+                                <div class="volunteer-form-note" id="volunteer-form-note"></div>
+                            </div>
+                            <div class="volunteer-form-actions">
+                                <button type="submit" class="btn">Submit Application</button>
+                                <button type="button" class="btn btn-secondary" id="volunteer-modal-cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="resources-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Resources for Parents & Teachers</h2>
+                        <p>Access helpful materials to support children's spiritual growth.</p>
+                        <h3>📚 Parent Resources</h3>
+                        <div class="resource-items">
+                            <div class="resource-item">
+                                <div class="resource-icon">📖</div>
+                                <strong>Weekly Lesson Guide</strong>
+                            </div>
+                            <div class="resource-item">
+                                <div class="resource-icon">🗣️</div>
+                                <strong>Conversation Starters</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gallery-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Photo Gallery</h2>
+                        <p><em>Note: Photos are restricted to registered parents. Please log in through the Parent Portal to view your child's classroom photos.</em></p>
+                        <div class="gallery-grid">
+                            <div class="gallery-item" aria-label="A classroom photo placeholder"><div class="gallery-placeholder">🎉</div></div>
+                            <div class="gallery-item" aria-label="A worship time photo placeholder"><div class="gallery-placeholder">📸</div></div>
+                            <div class="gallery-item" aria-label="A craft time photo placeholder"><div class="gallery-placeholder">🎨</div></div>
+                            <div class="gallery-item" aria-label="A church building photo placeholder"><div class="gallery-placeholder">⛪</div></div>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <a href="#" onclick="showPage('parent-portal'); return false;" class="btn">Access Parent Portal</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="portals-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Secure Portal Access</h2>
+                        <p>Access specialized tools and resources through our secure portals.</p>
+                    </div>
+                    <div class="portal-grid">
+                        <div class="portal-card">
+                            <h3>👪 Parent Portal</h3>
+                            <p>A secure area for parents to manage their children's ministry experience.</p>
+                            <ul class="feature-list">
+                                <li>View and update child profiles</li>
+                                <li>Access classroom photos and lesson summaries</li>
+                                <li>Register for events and activities</li>
+                                <li>Communicate with teachers</li>
+                            </ul>
+                            <a href="#" onclick="showPage('parent-portal'); return false;" class="btn">Parent Login</a>
+                        </div>
+                        <div class="portal-card">
+                            <h3>👨‍🏫 Teacher Portal</h3>
+                            <p>Comprehensive tools for volunteers and staff.</p>
+                            <ul class="feature-list">
+                                <li>Create and save lesson plans</li>
+                                <li>Access resource library</li>
+                                <li>View class rosters and attendance</li>
+                                <li>Upload photos securely</li>
+                                <li>Communicate with parents</li>
+                            </ul>
+                            <a href="#" onclick="showPage('teacher-portal'); return false;" class="btn btn-secondary">Teacher Login</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="parent-portal-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>🔐 Parent Portal Login</h2>
+                        <p>Welcome! Log in to access your child's information, photos, and ministry resources.</p>
+                        
+                        <div class="login-demo-info" id="parent-demo-credentials">
+                            <p><strong>Demo Credentials:</strong></p>
+                            <p>Email: <code id="parent-demo-email">parent@demo.com</code></p>
+                            <p>Password: <code id="parent-demo-password">Parent2025!</code></p>
+                            <p>Class Code: <code id="parent-demo-code">PREK-A</code></p>
+                        </div>
+                        <div class="parent-class-access" aria-live="polite">
+                            <h3>Class Access Codes</h3>
+                            <p id="parent-login-announcement">Use your classroom access code to log in and view updates.</p>
+                            <ul id="parent-class-codes-list" class="parent-class-code-list"></ul>
+                        </div>
+
+                        <form id="parent-login-form" onsubmit="handleParentLogin(event)">
+                            <div class="form-group">
+                                <label for="parent-email">Email Address *</label>
+                                <input type="email" id="parent-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parent-password">Password *</label>
+                                <input type="password" id="parent-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parent-code">Class Access Code *</label>
+                                <input type="text" id="parent-code" required>
+                            </div>
+                            <button type="submit" class="btn">Login to Portal</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="parent-dashboard-page" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>👪 Parent Dashboard</h2>
+                            <button onclick="handleLogout('parent')" class="btn btn-secondary">Logout</button>
+                        </div>
+                        <p>Welcome, <strong id="parent-name">Jennifer Smith</strong>!</p>
+                        
+                        <h3>Your Children</h3>
+                        <div class="child-profile-card">
+                            <h4 id="child-name-display" data-dashboard-child-name>Emma Smith</h4>
+                            <p><strong>Class:</strong> <span id="child-class-display" data-dashboard-class-name>Pre-K Room A (Ages 3-5)</span></p>
+                            <p><strong>Teacher:</strong> <span id="child-teacher-display" data-dashboard-teacher-name>Sarah Martinez</span></p>
+                            <p><strong>Allergies:</strong> <span id="child-allergies-display">None</span></p>
+                            <a href="#" class="btn-link">Edit Profile</a>
+                        </div>
+
+                        <h3 style="margin-top: 2rem;">This Week's Lesson</h3>
+                        <div class="lesson-summary-card">
+                            <h4 id="lesson-title">Noah's Ark - God Keeps His Promises</h4>
+                            <p><strong>Date:</strong> <span id="lesson-date">November 3, 2025</span></p>
+                            <p><strong>Key Verse:</strong> <span id="lesson-key-verse">"God keeps his promises." - Genesis 9:16</span></p>
+                            <p><strong>What We Learned:</strong> <span id="lesson-summary">Children learned about Noah, the ark, and the rainbow as a sign of God's promise. We discussed how God always keeps His promises to us.</span></p>
+                            <p><strong>At-Home Activity:</strong> <span id="lesson-activity">Draw a rainbow together and talk about promises your family makes to each other.</span></p>
+                        </div>
+
+                        <h3 style="margin-top: 2rem;">Portal Features</h3>
+                        <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="card portal-feature-card" data-parent-panel="gallery">
+                                <div class="card-icon">📸</div>
+                                <h3>Class Photos</h3>
+                                <p>View and download photos from Emma's classroom activities.</p>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="gallery" onclick="openParentPanel('gallery'); return false;">View Gallery (5 new)</a>
+                            </div>
+                            <div class="card portal-feature-card" data-parent-panel="chat">
+                                <div class="card-icon">💬</div>
+                                <h3>Message Teacher</h3>
+                                <p>Send a secure message to Sarah Martinez.</p>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="chat" onclick="openParentChat(); return false;">Start Chat</a>
+                            </div>
+                            <div class="card portal-feature-card" data-parent-panel="events">
+                                <div class="card-icon">📅</div>
+                                <h3>Event Registration</h3>
+                                <p>Register Emma for upcoming events and activities.</p>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="events" onclick="openParentPanel('events'); return false;">View Events</a>
+                            </div>
+                            <div class="card portal-feature-card" data-parent-panel="reports">
+                                <div class="card-icon">📋</div>
+                                <h3>Attendance & Reports</h3>
+                                <p>View Emma's attendance history and progress reports.</p>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="reports" onclick="openParentPanel('reports'); return false;">View Reports</a>
+                            </div>
+                        </div>
+
+                        <div id="parent-panel-wrapper" class="parent-panel-wrapper" aria-live="polite">
+                            <div class="parent-panel-header">
+                                <div>
+                                    <h3 id="parent-panel-title">Family tools</h3>
+                                    <p id="parent-panel-subtitle">Select a feature card above to load details here.</p>
+                                </div>
+                                <button type="button" class="btn btn-secondary parent-panel-reset" onclick="resetParentPanel()">Reset view</button>
+                            </div>
+
+                            <section id="parent-panel-default" class="parent-panel-section active">
+                                <div class="empty-state-panel">
+                                    <div class="empty-state-icon">✨</div>
+                                    <h4>Pick a feature to get started</h4>
+                                    <p>Your dashboard will refresh with real data from Emma's classroom once you open one of the tools.</p>
+                                </div>
+                            </section>
+
+                            <section id="parent-panel-gallery" class="parent-panel-section" aria-labelledby="parent-panel-title">
+                                <div class="panel-intro">
+                                    <h4>Latest classroom moments</h4>
+                                    <p>Photos are updated after each Sunday experience and stay visible for 30 days.</p>
+                                </div>
+                                <div id="parent-gallery-grid" class="parent-gallery-grid" aria-live="polite"></div>
+                            </section>
+
+                            <section id="parent-panel-chat" class="parent-panel-section" aria-labelledby="parent-panel-title">
+                                <div class="panel-intro">
+                                    <h4>Message Sarah Martinez</h4>
+                                    <p>Send a quick note or question. Replies arrive directly in your inbox and here in the portal.</p>
+                                </div>
+                                <div id="parent-chat-thread" class="parent-chat-thread" role="log" aria-live="polite"></div>
+                                <form id="parent-chat-form" class="parent-chat-form">
+                                    <label for="parent-chat-input">Write a message</label>
+                                    <textarea id="parent-chat-input" rows="3" required placeholder="Type your message to Sarah..."></textarea>
+                                    <div class="parent-chat-actions">
+                                        <button type="submit" class="btn">Send Message</button>
+                                        <button type="button" class="btn btn-secondary" onclick="openParentPanel('chat')">Refresh</button>
+                                    </div>
+                                </form>
+                            </section>
+
+                            <section id="parent-panel-events" class="parent-panel-section" aria-labelledby="parent-panel-title">
+                                <div class="panel-intro">
+                                    <h4>Upcoming events</h4>
+                                    <p>Reserve spots, confirm details, and manage registrations for Emma.</p>
+                                </div>
+                                <div id="parent-events-list" class="parent-event-grid" aria-live="polite"></div>
+                            </section>
+
+                            <section id="parent-panel-reports" class="parent-panel-section" aria-labelledby="parent-panel-title">
+                                <div class="panel-intro">
+                                    <h4>Attendance & progress</h4>
+                                    <p>Track weekly check-ins, learning milestones, and next steps for your family.</p>
+                                </div>
+                                <div id="parent-report-cards" class="parent-report-grid"></div>
+                                <table class="parent-report-table" aria-label="Attendance history">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Month</th>
+                                            <th scope="col">Present</th>
+                                            <th scope="col">Total Sundays</th>
+                                            <th scope="col">Attendance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="parent-attendance-body"></tbody>
+                                </table>
+                                <div class="parent-report-followup">
+                                    <h5>At-home follow up</h5>
+                                    <ul id="parent-followup-list"></ul>
+                                </div>
+                                <div class="parent-report-actions parent-chat-actions">
+                                    <button type="button" class="btn" onclick="downloadParentReport()">Download PDF Summary</button>
+                                    <button type="button" class="btn btn-secondary" onclick="openParentPanel('reports')">Refresh</button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="teacher-portal-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>🔐 Leadership Portal Login</h2>
+                        <p>Access role-specific tools for classroom and ministry leadership.</p>
+
+                        <div class="login-role-switch" role="tablist" aria-label="Select portal login type">
+                            <button type="button" class="role-toggle active" id="teacher-role-toggle" data-role="teacher" aria-selected="true" onclick="setStaffLoginRole('teacher')">
+                                👨‍🏫 Teacher Login
+                            </button>
+                            <button type="button" class="role-toggle" id="admin-role-toggle" data-role="admin" aria-selected="false" onclick="setStaffLoginRole('admin')">
+                                🛡️ Admin Login
+                            </button>
+                        </div>
+
+                        <section id="teacher-login-panel" class="login-panel" role="tabpanel" aria-labelledby="teacher-role-toggle">
+                            <div class="login-demo-info">
+                                <p><strong>Teacher Demo Credentials:</strong></p>
+                                <p>Email: <code>teacher@demo.com</code></p>
+                                <p>Password: <code>Teacher2025!</code></p>
+                            </div>
+
+                            <form id="teacher-login-form" onsubmit="handleTeacherLogin(event)" class="role-login-form">
+                                <div class="form-group">
+                                    <label for="teacher-email">Email Address *</label>
+                                    <input type="email" id="teacher-email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacher-password">Password *</label>
+                                    <input type="password" id="teacher-password" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Login as Teacher</button>
+                            </form>
+                            <p class="role-support-note">Need access? Contact Emily Chen: <a href="mailto:volunteers@bengalchurch.org">volunteers@bengalchurch.org</a></p>
+                        </section>
+
+                        <section id="admin-login-panel" class="login-panel" role="tabpanel" aria-labelledby="admin-role-toggle" hidden>
+                            <div class="login-demo-info admin-info">
+                                <p><strong>Admin Demo Credentials:</strong></p>
+                                <p>Email: <code>admin@demo.com</code></p>
+                                <p>Password: <code>Admin2025!</code></p>
+                                <p>2FA Demo Code: <code>146829</code></p>
+                            </div>
+
+                            <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="role-login-form">
+                                <div class="form-group">
+                                    <label for="admin-email">Email Address *</label>
+                                    <input type="email" id="admin-email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-password">Password *</label>
+                                    <input type="password" id="admin-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="admin-otp">One-Time Passcode *</label>
+                                    <input type="text" id="admin-otp" placeholder="Enter 6-digit code" pattern="\d{6}" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Login as Admin</button>
+                            </form>
+                            <p class="role-support-note">For account provisioning email Pastor David Johnson: <a href="mailto:admin@bengalchurch.org">admin@bengalchurch.org</a></p>
+                        </section>
+                    </div>
+                </div>
+
+                <div id="admin-parent-management" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>👪 Parent Accounts</h2>
+                            <button type="button" class="btn btn-secondary" onclick="showPage('admin-dashboard'); return false;">Back to Admin Home</button>
+                        </div>
+
+                        <div class="admin-parent-layout">
+                            <section class="admin-parent-form" aria-labelledby="admin-parent-form-title">
+                                <header>
+                                    <h3 id="admin-parent-form-title">Create Parent Account</h3>
+                                    <p>Generate a secure login and class access code for new families.</p>
+                                </header>
+                                <form id="admin-parent-create-form" novalidate>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="parent-admin-name">Parent Name *</label>
+                                            <input type="text" id="parent-admin-name" name="parentName" required autocomplete="name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parent-admin-email">Email Address *</label>
+                                            <input type="email" id="parent-admin-email" name="parentEmail" required autocomplete="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parent-admin-password">Temporary Password *</label>
+                                            <input type="text" id="parent-admin-password" name="parentPassword" required placeholder="e.g. Parent2025!" autocomplete="new-password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parent-admin-child">Child Name *</label>
+                                            <input type="text" id="parent-admin-child" name="childName" required autocomplete="given-name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parent-admin-class">Assign Classroom *</label>
+                                            <select id="parent-admin-class" name="classId" required></select>
+                                        </div>
+                                        <div class="form-group read-only">
+                                            <label for="parent-admin-access-code">Class Access Code</label>
+                                            <input type="text" id="parent-admin-access-code" name="accessCode" readonly>
+                                            <small>This code unlocks the parent portal for the assigned class.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <button type="submit" class="btn">Create Parent Account</button>
+                                        <button type="button" class="btn btn-secondary" id="parent-admin-reset">Reset</button>
+                                    </div>
+                                </form>
+                                <div id="parent-admin-feedback" class="form-feedback" aria-live="assertive"></div>
+                            </section>
+
+                            <section class="admin-parent-roster" aria-labelledby="admin-parent-roster-title">
+                                <header>
+                                    <h3 id="admin-parent-roster-title">Active Parent Accounts</h3>
+                                    <p>These credentials unlock the parent dashboard and class updates.</p>
+                                    <div class="admin-parent-roster-actions">
+                                        <label class="sr-only" for="parent-admin-filter">Filter by classroom</label>
+                                        <select id="parent-admin-filter"></select>
+                                        <button type="button" class="btn btn-secondary" id="parent-admin-export">Export CSV</button>
+                                    </div>
+                                </header>
+                                <div class="admin-parent-table-wrapper" role="region" aria-live="polite">
+                                    <table class="admin-parent-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Parent</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Child</th>
+                                                <th scope="col">Class</th>
+                                                <th scope="col">Access Code</th>
+                                                <th scope="col">Created</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="admin-parent-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="teacher-dashboard-page" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>👨‍🏫 Teacher Dashboard</h2>
+                            <button onclick="handleLogout('teacher')" class="btn btn-secondary">Logout</button>
+                        </div>
+                        <p>Welcome, <strong id="teacher-name">Sarah Martinez</strong>!</p>
+                        
+                        <h3>Your Classes</h3>
+                        <div class="class-info-card">
+                            <h4 id="class-name-display">Pre-K Room A (Ages 3-5)</h4>
+                            <p><strong>Meeting Time:</strong> Sundays, 9:00 AM - 10:30 AM</p>
+                            <p><strong>Current Enrollment:</strong> <span id="class-enrollment-display">12 children</span></p>
+                            <p><strong>Next Lesson:</strong> The Good Shepherd (November 10, 2025)</p>
+                            <a href="#" class="btn-link">View Class Roster</a>
+                        </div>
+
+                        <h3 style="margin-top: 2rem;">Quick Actions</h3>
+                        <div class="card-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">➕</div>
+                                <h3>Create Lesson Plan</h3>
+                                <p>Start a new lesson plan with our digital planning tool.</p>
+                                <a href="#" onclick="showPage('lesson-plan-builder'); return false;" class="btn">New Lesson</a>
+                            </div>
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">📚</div>
+                                <h3>Resource Library</h3>
+                                <p>Access 50+ saved lesson plans and teaching materials.</p>
+                                <a href="#" onclick="showPage('resource-library'); return false;" class="btn">Browse Resources</a>
+                            </div>
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">📸</div>
+                                <h3>Upload Photos</h3>
+                                <p>Securely upload classroom photos to parent gallery.</p>
+                                <button type="button" class="btn" onclick="uploadPhotos()">Upload Photos</button>
+                            </div>
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">💬</div>
+                                <h3>Message Parents</h3>
+                                <p>Send secure messages to your class families.</p>
+                                <a href="#" onclick="showPage('teacher-messages'); return false;" class="btn">Open Messages (3)</a>
+                            </div>
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">✓</div>
+                                <h3>Take Attendance</h3>
+                                <p>Record attendance for today's class session.</p>
+                                <a href="#" onclick="takeAttendance(); return false;" class="btn">Mark Attendance</a>
+                            </div>
+                            <div class="card portal-feature-card">
+                                <div class="card-icon">📋</div>
+                                <h3>View Reports</h3>
+                                <p>Generate attendance and participation reports.</p>
+                                <a href="#" onclick="viewReports(); return false;" class="btn">View Reports</a>
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top: 2rem;">Recent Lesson Plans</h3>
+                        <div class="lesson-plan-list" id="teacher-lesson-list">
+                            <div class="lesson-plan-item">
+                                <div>
+                                    <h4>Noah's Ark - God Keeps His Promises</h4>
+                                    <p>Pre-K | November 3, 2025 | Genesis 6-9</p>
+                                </div>
+                                <div class="lesson-actions">
+                                    <a href="#" onclick="viewLessonPlan(1); return false;" class="btn-link">View</a>
+                                    <a href="#" onclick="editLessonPlan(1); return false;" class="btn-link">Edit</a>
+                                    <a href="#" onclick="duplicateLessonPlan(1); return false;" class="btn-link">Duplicate</a>
+                                </div>
+                            </div>
+                            <div class="lesson-plan-item">
+                                <div>
+                                    <h4>Jesus Loves the Little Children</h4>
+                                    <p>Pre-K | October 27, 2025 | Mark 10:13-16</p>
+                                </div>
+                                <div class="lesson-actions">
+                                    <a href="#" onclick="viewLessonPlan(2); return false;" class="btn-link">View</a>
+                                    <a href="#" onclick="editLessonPlan(2); return false;" class="btn-link">Edit</a>
+                                    <a href="#" onclick="duplicateLessonPlan(2); return false;" class="btn-link">Duplicate</a>
+                                </div>
+                            </div>
+                            <div class="lesson-plan-item">
+                                <div>
+                                    <h4>Creation - God Made Everything</h4>
+                                    <p>Pre-K | October 20, 2025 | Genesis 1-2</p>
+                                </div>
+                                <div class="lesson-actions">
+                                    <a href="#" onclick="viewLessonPlan(3); return false;" class="btn-link">View</a>
+                                    <a href="#" onclick="editLessonPlan(3); return false;" class="btn-link">Edit</a>
+                                    <a href="#" onclick="duplicateLessonPlan(3); return false;" class="btn-link">Duplicate</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="admin-dashboard-page" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>🛡️ Admin Control Center</h2>
+                            <button onclick="handleLogout('admin')" class="btn btn-secondary">Logout</button>
+                        </div>
+                        <p>Welcome, <strong id="admin-name">Pastor David Johnson</strong>!</p>
+
+                        <section class="admin-grid">
+                            <article class="admin-panel">
+                                <header>
+                                    <h3>Ministry Snapshot</h3>
+                                    <button class="btn-link" onclick="openAdminReportCenter(); return false;">View full report</button>
+                                </header>
+                                <ul class="admin-list">
+                                    <li><strong>Volunteer Coverage:</strong> <span id="admin-coverage">96% staffed for November</span></li>
+                                    <li><strong>Background Checks:</strong> <span id="admin-background">3 pending renewals</span></li>
+                                    <li><strong>Check-in Performance:</strong> <span id="admin-checkins">Avg 2m 15s per family</span></li>
+                                </ul>
+                            </article>
+
+                            <article class="admin-panel admin-class-access-card">
+                                <header>
+                                    <h3>Parent Access Codes</h3>
+                                    <button class="btn-link" onclick="showPage('admin-parent-management'); return false;">Manage parents</button>
+                                </header>
+                                <ul class="admin-list" id="admin-class-access-list" aria-live="polite"></ul>
+                            </article>
+
+                            <article class="admin-panel">
+                                <header>
+                                    <h3>Security & Compliance</h3>
+                                    <button class="btn-link" onclick="viewSecurityAudit(); return false;">Audit log</button>
+                                </header>
+                                <div class="admin-security">
+                                    <p><strong>Last security audit:</strong> <span id="admin-audit-date">Oct 30, 2025</span></p>
+                                    <p><strong>2FA Adoption:</strong> <span id="admin-2fa-rate">100% of admins enabled</span></p>
+                                    <p><strong>Safe Environment Training:</strong> <span id="admin-training">Renewal cycle opens Dec 1</span></p>
+                                </div>
+                            </article>
+                        </section>
+
+                        <section class="admin-action-grid">
+                            <article class="card portal-feature-card" onclick="openStaffManagement(); return false;">
+                                <div class="card-icon">🗂️</div>
+                                <h3>Manage Staff & Roles</h3>
+                                <p>Assign classes, update permissions, and onboard new volunteers.</p>
+                                <a href="#" class="btn">Open Staff Manager</a>
+                            </article>
+                            <article class="card portal-feature-card" onclick="configureCheckIn(); return false;">
+                                <div class="card-icon">🎫</div>
+                                <h3>Check-in & Security</h3>
+                                <p>Configure kiosks, guardians, and pickup procedures.</p>
+                                <a href="#" class="btn">Configure Check-In</a>
+                            </article>
+                            <article class="card portal-feature-card" onclick="showPage('admin-parent-management'); return false;">
+                                <div class="card-icon">👪</div>
+                                <h3>Parent Accounts</h3>
+                                <p>Create parent logins and manage classroom access codes.</p>
+                                <a href="#" class="btn">Create Parent Account</a>
+                            </article>
+                        </section>
+                    </div>
+                </div>
+
+                <div id="staff-management-modal" class="modal staff-management-modal" role="dialog" aria-modal="true" aria-labelledby="staff-manager-title" aria-hidden="true">
+                    <div class="modal-content staff-modal-content" role="document">
+                        <div class="modal-header">
+                            <div>
+                                <h3 id="staff-manager-title">Staff & Role Manager</h3>
+                                <p class="staff-modal-subtitle">Review coverage, adjust assignments, and start onboarding directly from this workspace.</p>
+                            </div>
+                            <button type="button" class="btn-icon" id="staff-management-close" aria-label="Close staff manager">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="staff-modal-body">
+                            <div class="staff-controls" role="region" aria-label="Staff filters">
+                                <div class="staff-search">
+                                    <label for="staff-search-input">Search team members</label>
+                                    <input type="search" id="staff-search-input" placeholder="Search by name, role, or email" autocomplete="off" />
+                                </div>
+                                <div class="staff-filters">
+                                    <div class="staff-filter-group">
+                                        <label for="staff-role-filter">Role group</label>
+                                        <select id="staff-role-filter">
+                                            <option value="all">All roles</option>
+                                            <option value="teacher">Teachers</option>
+                                            <option value="assistant">Assistants</option>
+                                            <option value="security">Security</option>
+                                            <option value="admin">Administrators</option>
+                                            <option value="volunteer">Volunteers</option>
+                                        </select>
+                                    </div>
+                                    <div class="staff-filter-group">
+                                        <label for="staff-status-filter">Status</label>
+                                        <select id="staff-status-filter">
+                                            <option value="all">All statuses</option>
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending onboarding</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="staff-metrics" role="status" aria-live="polite">
+                                <article class="staff-metric-card">
+                                    <h4>Total team</h4>
+                                    <p id="staff-total-count">0</p>
+                                    <span id="staff-active-count">0 active</span>
+                                </article>
+                                <article class="staff-metric-card">
+                                    <h4>Coverage health</h4>
+                                    <p id="staff-coverage-score">Good</p>
+                                    <span id="staff-coverage-detail">Rotation balanced</span>
+                                </article>
+                                <article class="staff-metric-card">
+                                    <h4>Clearance status</h4>
+                                    <p id="staff-clearance-count">0 pending</p>
+                                    <span id="staff-clearance-detail">Background checks</span>
+                                </article>
+                                <article class="staff-metric-card">
+                                    <h4>Open roles</h4>
+                                    <p id="staff-open-role-count">0</p>
+                                    <span id="staff-open-role-detail">Ready to assign</span>
+                                </article>
+                            </div>
+
+                            <div class="staff-layout">
+                                <section class="staff-table-section" aria-labelledby="staff-roster-heading">
+                                    <header class="staff-section-header">
+                                        <h4 id="staff-roster-heading">Current roster</h4>
+                                        <div class="staff-section-actions">
+                                            <button type="button" class="btn btn-secondary" id="staff-export-btn">Export CSV</button>
+                                            <button type="button" class="btn" id="staff-add-btn">Add team member</button>
+                                        </div>
+                                    </header>
+                                    <div class="staff-table-wrapper" role="region" aria-live="polite">
+                                        <table class="staff-table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Role</th>
+                                                    <th scope="col">Team</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Clearance</th>
+                                                    <th scope="col">Next Serving</th>
+                                                    <th scope="col">Contact</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="staff-table-body"></tbody>
+                                        </table>
+                                    </div>
+                                </section>
+
+                                <aside class="staff-side-panel" aria-labelledby="open-roles-heading">
+                                    <section class="staff-side-card">
+                                        <h4 id="open-roles-heading">Open roles & needs</h4>
+                                        <ul id="staff-open-roles" class="staff-open-role-list"></ul>
+                                    </section>
+                                    <section class="staff-side-card">
+                                        <h4 id="upcoming-training-heading">Upcoming onboarding</h4>
+                                        <ul id="staff-upcoming-training" class="staff-training-list"></ul>
+                                    </section>
+                                </aside>
+                            </div>
+                        </div>
+
+                        <div class="staff-modal-actions">
+                            <button type="button" class="btn btn-secondary" id="staff-save-plan">Save updates</button>
+                            <button type="button" class="btn-link" id="staff-close-footer">Close</button>
+                        </div>
+                    </div>
+                </div><div id="teacher-messages-page" class="page-hidden">
+    <div class="content-section">
+        <div class="dashboard-header">
+            <h2>💬 Messages</h2>
+            <button onclick="showPage('teacher-dashboard'); return false;" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white" style="vertical-align: middle; margin-right: 0.5rem;">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back to Dashboard
+            </button>
+        </div>
+
+        <div class="messaging-container">
+            <!-- Conversations List -->
+            <div class="conversations-panel">
+                <div class="conversations-header">
+                    <h3>Conversations</h3>
+                    <button class="btn-compose" onclick="startNewConversation()">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        New Message
+                    </button>
+                </div>
+                
+                <div class="conversations-search">
+                    <input type="text" id="conversation-search" placeholder="Search conversations..." onkeyup="filterConversations()">
+                </div>
+
+                <div class="conversations-list" id="conversations-list">
+                    <!-- Conversations will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Message Thread -->
+            <div class="message-thread-panel">
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <h3>Select a conversation</h3>
+                    <p>Choose a parent from the list to view your message history</p>
+                </div>
+
+                <div id="message-thread-container" class="message-thread-container" style="display: none;">
+                    <div class="thread-header">
+                        <div class="thread-header-info">
+                            <h3 id="thread-parent-name">Jennifer Smith</h3>
+                            <p id="thread-child-info">Parent of Emma Smith (Pre-K Room A)</p>
+                        </div>
+                        <button class="btn-icon" onclick="closeThread()" title="Close conversation">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="messages-area" id="messages-area">
+                        <!-- Messages will be dynamically loaded here -->
+                    </div>
+
+                    <div class="message-compose-area">
+                        <form id="message-form" onsubmit="sendMessage(event)">
+                            <textarea 
+                                id="message-input" 
+                                placeholder="Type your message here..." 
+                                rows="3"
+                                required
+                            ></textarea>
+                            <div class="compose-actions">
+                                <div class="compose-info">
+                                    <small>Press Enter to send, Shift+Enter for new line</small>
+                                </div>
+                                <button type="submit" class="btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white" style="vertical-align: middle; margin-right: 0.5rem;">
+                                        <path d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    </svg>
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+                <!-- LESSON PLAN BUILDER PAGE -->
+                <div id="lesson-plan-builder-page" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>📝 Create New Lesson Plan</h2>
+                            <button onclick="showPage('teacher-dashboard'); return false;" class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white" style="vertical-align: middle; margin-right: 0.5rem;">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                                </svg>
+                                Back to Dashboard
+                            </button>
+                        </div>
+                        <p>Fill out the details below to generate and save your comprehensive lesson plan for your Pre-K or Elementary class.</p>
+
+                        <form id="lesson-plan-form" onsubmit="saveLessonPlan(event)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lp-title">Lesson Title *</label>
+                                        <input type="text" id="lp-title" required placeholder="e.g., Noah's Ark - God Keeps His Promises">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lp-group">Target Age Group *</label>
+                                        <select id="lp-group" required>
+                                            <option value="">Select Group</option>
+                                            <option value="Pre-K (Ages 3-5)">Pre-K (Ages 3-5)</option>
+                                            <option value="Elementary (K-2)">Elementary (K-2)</option>
+                                            <option value="Elementary (3-5)">Elementary (3-5)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lp-date">Date of Lesson *</label>
+                                        <input type="date" id="lp-date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lp-scripture">Main Scripture Reference</label>
+                                        <input type="text" id="lp-scripture" placeholder="e.g., Genesis 6-9 or Mark 10:13-16">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lp-keyverse">Key Verse / Memory Verse</label>
+                                <input type="text" id="lp-keyverse" placeholder="e.g., 'God keeps his promises.' - Genesis 9:16">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lp-objectives">Lesson Objectives (What should the children learn?)</label>
+                                <textarea id="lp-objectives" rows="4" placeholder="Use bullet points or short phrases. E.g.:&#10;- Children will learn that God created the world.&#10;- Children will understand that God loves them."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lp-activities">Detailed Activities / Lesson Flow *</label>
+                                <textarea id="lp-activities" rows="8" required placeholder="Outline the time-based flow of the lesson:&#10;9:00 - Welcome/Free Play&#10;9:15 - Worship Song&#10;9:30 - Bible Story (The Good Samaritan)&#10;9:50 - Craft/Game (Bandage making)&#10;10:10 - Small Group Discussion"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lp-materials">Materials Needed</label>
+                                <textarea id="lp-materials" rows="3" placeholder="List all supplies: Markers, construction paper, glue, Bible, etc."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white" style="vertical-align: middle; margin-right: 0.5rem;">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                                </svg>
+                                Save Lesson Plan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RESOURCE LIBRARY PAGE -->
+                <div id="resource-library-page" class="page-hidden">
+                    <div class="content-section">
+                        <div class="dashboard-header">
+                            <h2>📚 Resource Library</h2>
+                            <button onclick="showPage('teacher-dashboard'); return false;" class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="white" style="vertical-align: middle; margin-right: 0.5rem;">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                                </svg>
+                                Back to Dashboard
+                            </button>
+                        </div>
+                        <p>Browse and search our comprehensive collection of teaching resources and materials.</p>
+
+                        <!-- Search and Filter Bar -->
+                        <div class="resource-search-bar">
+                            <div class="search-input-wrapper">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#666" class="search-icon">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                </svg>
+                                <input type="text" id="resource-search" placeholder="Search resources by title, description, or category..." onkeyup="filterResources()">
+                            </div>
+                            <button class="btn" onclick="clearFilters()">Clear Filters</button>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="category-filter-section">
+                            <h3>Browse by Category:</h3>
+                            <div class="category-pills">
+                                <button class="category-pill active" data-category="all" onclick="filterByCategory('all')">All Resources</button>
+                                <button class="category-pill" data-category="lesson-plans" onclick="filterByCategory('lesson-plans')">Lesson Plans</button>
+                                <button class="category-pill" data-category="craft-templates" onclick="filterByCategory('craft-templates')">Craft Templates</button>
+                                <button class="category-pill" data-category="coloring-pages" onclick="filterByCategory('coloring-pages')">Coloring Pages</button>
+                                <button class="category-pill" data-category="activity-sheets" onclick="filterByCategory('activity-sheets')">Activity Sheets</button>
+                                <button class="category-pill" data-category="music-songs" onclick="filterByCategory('music-songs')">Music & Songs</button>
+                                <button class="category-pill" data-category="parent-resources" onclick="filterByCategory('parent-resources')">Parent Resources</button>
+                            </div>
+                        </div>
+
+                        <!-- Subcategory Filter (for Lesson Plans) -->
+                        <div id="lesson-subcategory-filter" class="subcategory-filter-section" style="display: none;">
+                            <h4>Lesson Plan Topics:</h4>
+                            <div class="subcategory-checkboxes">
+                                <label><input type="checkbox" value="old-testament" onchange="filterResources()"> Old Testament Stories</label>
+                                <label><input type="checkbox" value="new-testament" onchange="filterResources()"> New Testament Stories</label>
+                                <label><input type="checkbox" value="character-building" onchange="filterResources()"> Character Building</label>
+                                <label><input type="checkbox" value="seasonal" onchange="filterResources()"> Seasonal Lessons</label>
+                            </div>
+                        </div>
+
+                        <!-- Results Count -->
+                        <div class="resource-results-info">
+                            <p>Showing <strong id="resource-count">150</strong> resources</p>
+                        </div>
+
+                        <!-- Resource Grid -->
+                        <div class="resource-library-grid" id="resource-grid">
+                            <!-- Resources will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contact-page" class="page-hidden">
+                    <div class="content-section">
+                        <h2>Contact Us</h2>
+                        <p>We'd love to hear from you! Whether you have questions or want to get involved, we're here to help.</p>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>📍 Visit Us</h3>
+                            <p><strong>Bengal Christian Church</strong><br>
+                            3518 S Shelby 750 W<br>
+                            Franklin, Indiana 46131</p>
+                            <p><strong>Sunday Services:</strong><br>
+                            9:00 AM & 10:30 AM</p>
+                        </div>
+                        <div class="card">
+                            <h3>📞 Call Us</h3>
+                            <p><strong>Church Office:</strong><br>
+                            <a href="tel:1-574-538-8350">574-538-8350</a></p>
+                            <p><strong>Office Hours:</strong><br>
+                            Tues to Fri: 9AM - 4PM</p>
+                        </div>
+                        <div class="card">
+                            <h3>✉️ Email Us</h3>
+                            <p><strong>Children's Ministry:</strong><br>
+                            <a href="mailto:BengalChristianchurch.est.1884@gmail.com">BengalChristianchurch.est.1884@gmail.com</a></p>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <h3>Send Us a Message</h3>
+                        <form onsubmit="handleContactForm(event)">
+                            <div class="form-group">
+                                <label>Your Name *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address *</label>
+                                <input type="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Message *</label>
+                                <textarea rows="6" required></textarea>
+                            </div>
+                            <button type="submit" class="btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="footer">
+        <div class="bg-footer">
+            <div class="bg-tone"></div>
+            <div class="container">
+                <div class="row" style="align-items: center; margin: 2rem 0;">
+                    <div class="col-md-4" style="text-align: center;">
+                        <img alt="Bengal Christian Church" style="max-width: 225px; margin: 0 auto;" src="https://dq5pwpg1q8ru0.cloudfront.net/2022/03/21/13/04/05/a0e79060-864a-4123-b4b7-61497f467ebe/Website-Color-Horizontal%25406x.png" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div style="width: 25%; padding: 0 15px;">
+                                <h2 class="footer-heading">Location</h2>
+                                <div class="footer-text">
+                                    3518 S Shelby 750 W<br/>
+                                    Franklin, Indiana<br/>
+                                    46131<br/>
+                                    <a target="_blank" href="https://www.bing.com/maps?q=bengal+christian+church">View Map</a>
+                                </div>
+                            </div>
+                            <div style="width: 33.33%; padding: 0 15px;">
+                                <h2 class="footer-heading">Contact</h2>
+                                <div class="footer-text">
+                                    <strong>Phone:</strong> <a href="tel:1-574-538-8350">574-538-8350</a><br/>
+                                    <strong>Email:</strong> <a href="mailto:BengalChristianchurch.est.1884@gmail.com">BengalChristianchurch.est.1884@gmail.com</a>
+                                </div>
+                            </div>
+                            <div style="width: 33.33%; padding: 0 15px;">
+                                <h2 class="footer-heading">Office Hours</h2>
+                                <div class="footer-text">
+                                    Tues to Fri 9AM - 4PM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div style="text-align: center; padding: 1rem 0;">
+                    <a class="social-icon-link" target="_blank" href="https://www.facebook.com/BengalChristianChurch" style="display: inline-flex; margin: 0 0.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="social-icon-svg">
+                            <path d="M24,0v24H0V0H24z M20,2.7h-3.3c-2.5,0-4.7,2.1-4.7,4.7v3.3H9.3v4H12V24h4v-9.3h4v-4h-4V8c0-0.8,0.5-1.3,1.3-1.3H20V2.7z"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div style="text-align: center; font-size: 0.9rem; color: #666; padding: 1rem 0;">
+                    &copy; 2025 Bengal Christian Church. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+   
+    <!-- New Conversation Modal -->
+    <div id="new-conversation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Conversation</h3>
+                <button class="btn-icon" onclick="closeNewConversationModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="new-conversation-form" onsubmit="createNewConversation(event)">
+                    <div class="form-group">
+                        <label for="select-parent">Select Parent *</label>
+                        <select id="select-parent" required>
+                            <option value="">Choose a parent...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="initial-message">Message *</label>
+                        <textarea id="initial-message" rows="5" required placeholder="Type your message here..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeNewConversationModal()">Cancel</button>
+                        <button type="submit" class="btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+</body>
+</html>
