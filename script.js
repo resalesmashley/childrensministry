@@ -825,6 +825,16 @@ function handleParentLogin(event) {
         document.getElementById('parent-name').textContent = account.name;
 
         showPage('parent-dashboard');
+        resetParentPanel();
+
+        setTimeout(() => {
+            updateParentViewAfterLogin();
+        }, 100);
+    } else {
+
+        document.getElementById('parent-name').textContent = account.name;
+
+        showPage('parent-dashboard');
 
         setTimeout(() => {
             updateParentViewAfterLogin();
@@ -956,12 +966,87 @@ let parentPanelState = {
     activePanel: 'default'
 };
 
+let parentDashboardData = null;
+
+function normalizeParentDashboardData(raw = {}) {
+    return {
+        childId: raw.childId || currentUser.data?.child?.id || 'child-001',
+        childName: raw.childName || currentUser.data?.child?.name || 'Emma Smith',
+        className: raw.className || currentUser.data?.child?.class || 'Pre-K Room A',
+        teacher: raw.teacher || currentUser.data?.child?.teacher || 'Sarah Martinez',
+        lastUpdated: raw.lastUpdated || new Date().toISOString(),
+        gallery: Array.isArray(raw.gallery) && raw.gallery.length ? [...raw.gallery] : [...PARENT_GALLERY_ITEMS],
+        messages: Array.isArray(raw.messages) && raw.messages.length ? [...raw.messages] : [...PARENT_CHAT_MESSAGES],
+        events: Array.isArray(raw.events) && raw.events.length ? [...raw.events] : [...PARENT_EVENTS],
+        attendance: Array.isArray(raw.attendance) && raw.attendance.length ? [...raw.attendance] : [...PARENT_ATTENDANCE],
+        followup: Array.isArray(raw.followup) && raw.followup.length ? [...raw.followup] : [...PARENT_FOLLOWUP],
+        reports: raw.reports ? { ...raw.reports } : {
+            attendance: '92%',
+            memoryVerse: 'In Progress',
+            nextStep: 'Encourage Emma to bring a friend to Fall Festival'
+        }
+    };
+}
+
+function renderActiveParentPanel() {
+    switch (parentPanelState.activePanel) {
+        case 'gallery':
+            renderParentGallery();
+            break;
+        case 'chat':
+            renderParentChat();
+            break;
+        case 'events':
+            renderParentEvents();
+            break;
+        case 'reports':
+            renderParentReports();
+            break;
+        default:
+            break;
+    }
+}
+
+function formatParentChatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) {
+        return timestamp;
+    }
+
+    const datePart = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const timePart = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return `${datePart} • ${timePart}`;
+}
+
 function resetParentPanel() {
     parentPanelState.activePanel = 'default';
     updateParentPanelUI();
 }
 
-function openParentPanel(panelName) {
+async function openParentPanel(panelName) {
+    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
+        showMessageToast('Please log in to the Parent Portal to access this tool.');
+        return false;
+    }
+
+    const statusMessages = {
+        gallery: 'Loading classroom photos...',
+        chat: 'Opening your messages...',
+        events: 'Checking upcoming events...',
+        reports: 'Preparing your reports...'
+    };
+
+    try {
+        await ensureParentDashboardData({
+            forceRefresh: !parentDashboardData,
+            statusMessage: statusMessages[panelName] || 'Loading your family tools...'
+        });
+    } catch (error) {
+        console.error('Unable to load parent dashboard data:', error);
+        showMessageToast('We could not load that tool. Please try again.');
+        return false;
+    }
+
     parentPanelState.activePanel = panelName;
 
     switch (panelName) {
@@ -983,20 +1068,19 @@ function openParentPanel(panelName) {
             break;
         default:
             resetParentPanel();
-            return;
+            return false;
     }
 
     updateParentPanelUI();
+    return true;
 }
 
-function openParentChat() {
-    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
-        alert('Please log in to the Parent Portal to message your teacher.');
-        return;
-    }
-    openParentPanel('chat');
+async function openParentChat() {
+    const opened = await openParentPanel('chat');
+    if (!opened) return;
+
     const input = document.getElementById('parent-chat-input');
-    if (input) {
+    if (input && !input.disabled) {
         input.focus();
     }
 }
@@ -1038,12 +1122,14 @@ function renderParentGallery() {
     const grid = document.getElementById('parent-gallery-grid');
     if (!grid) return;
 
-    if (PARENT_GALLERY_ITEMS.length === 0) {
+    const galleryItems = parentDashboardData?.gallery ?? PARENT_GALLERY_ITEMS;
+
+    if (galleryItems.length === 0) {
         grid.innerHTML = '<p class="panel-empty">No photos available yet. Check back after Sunday service.</p>';
         return;
     }
 
-    grid.innerHTML = PARENT_GALLERY_ITEMS.map(item => `
+    grid.innerHTML = galleryItems.map(item => `
         <article class="parent-gallery-card">
             <img src="${item.thumbnail}" alt="${item.title}" loading="lazy" />
             <div class="parent-gallery-meta">
@@ -1060,7 +1146,14 @@ function renderParentChat() {
     const thread = document.getElementById('parent-chat-thread');
     if (!thread) return;
 
-    thread.innerHTML = PARENT_CHAT_MESSAGES.map(message => `
+    const messages = parentDashboardData?.messages ?? PARENT_CHAT_MESSAGES;
+
+    if (!messages.length) {
+        thread.innerHTML = '<p class="panel-empty">No messages yet. Start the conversation with your teacher!</p>';
+        return;
+    }
+
+    thread.innerHTML = messages.map(message => `
         <div class="parent-chat-bubble ${message.sender === 'You' ? 'from-parent' : 'from-teacher'}">
             <div class="parent-chat-meta">
                 <strong>${message.sender}</strong>
@@ -1069,13 +1162,22 @@ function renderParentChat() {
             <p>${message.message}</p>
         </div>
     `).join('');
+
+    thread.scrollTop = thread.scrollHeight;
 }
 
 function renderParentEvents() {
     const list = document.getElementById('parent-events-list');
     if (!list) return;
 
-    list.innerHTML = PARENT_EVENTS.map(event => `
+    const events = parentDashboardData?.events ?? PARENT_EVENTS;
+
+    if (!events.length) {
+        list.innerHTML = '<p class="panel-empty">No upcoming events right now. Check back soon for new opportunities.</p>';
+        return;
+    }
+
+    list.innerHTML = events.map(event => `
         <article class="parent-event-card">
             <header>
                 <h5>${event.name}</h5>
@@ -1096,39 +1198,58 @@ function renderParentReports() {
     const tableBody = document.getElementById('parent-attendance-body');
     const followupList = document.getElementById('parent-followup-list');
 
+    const reports = parentDashboardData?.reports || {
+        attendance: '92%',
+        memoryVerse: 'In Progress',
+        nextStep: 'Encourage Emma to bring a friend to Fall Festival'
+    };
+    const attendance = parentDashboardData?.attendance ?? PARENT_ATTENDANCE;
+    const followup = parentDashboardData?.followup ?? PARENT_FOLLOWUP;
+
     if (cardsContainer) {
         cardsContainer.innerHTML = `
             <article class="parent-report-card">
                 <h5>Attendance</h5>
-                <p><strong>92%</strong> attendance across the past 3 months.</p>
+                <p><strong>${reports.attendance || '—'}</strong> attendance across the past 3 months.</p>
             </article>
             <article class="parent-report-card">
                 <h5>Memory Verse</h5>
-                <p>Emma recited the verse with prompts this week. Celebrate progress!</p>
+                <p>${reports.memoryVerse || 'Progress update coming soon.'}</p>
             </article>
             <article class="parent-report-card">
                 <h5>Next Step</h5>
-                <p>Encourage Emma to bring a friend to Fall Festival on Nov 10.</p>
+                <p>${reports.nextStep || 'Check back soon for a suggested next step.'}</p>
             </article>
         `;
     }
 
     if (tableBody) {
-        tableBody.innerHTML = PARENT_ATTENDANCE.map(row => {
-            const percentage = Math.round((row.present / row.total) * 100);
-            return `
+        if (!attendance.length) {
+            tableBody.innerHTML = `
                 <tr>
-                    <td>${row.month}</td>
-                    <td>${row.present}</td>
-                    <td>${row.total}</td>
-                    <td>${percentage}%</td>
+                    <td colspan="4">Attendance details will appear after Emma's next check-in.</td>
                 </tr>
             `;
-        }).join('');
+        } else {
+            tableBody.innerHTML = attendance.map(row => {
+                const totalSessions = row.total || 0;
+                const percentage = totalSessions ? Math.round((row.present / totalSessions) * 100) : 0;
+                return `
+                    <tr>
+                        <td>${row.month}</td>
+                        <td>${row.present}</td>
+                        <td>${row.total}</td>
+                        <td>${percentage}%</td>
+                    </tr>
+                `;
+            }).join('');
+        }
     }
 
     if (followupList) {
-        followupList.innerHTML = PARENT_FOLLOWUP.map(item => `<li>${item}</li>`).join('');
+        followupList.innerHTML = followup.length
+            ? followup.map(item => `<li>${item}</li>`).join('')
+            : '<li>No follow-up steps right now. Enjoy time together as a family!</li>';
     }
 }
 
@@ -2719,6 +2840,52 @@ const ParentPortalController = {
      * Fetch parent dashboard data from GET /parent/dashboard
      * @returns {Promise<Object>} Dashboard data
      */
+    async fetchParentDashboard(statusMessage = 'Loading your dashboard...') {
+        if (this.uiState.activeRequest) {
+            return this.uiState.activeRequest;
+        }
+
+        const wrapper = document.getElementById('parent-panel-wrapper');
+        if (wrapper) {
+            this.showLoadingState(wrapper, statusMessage);
+        }
+
+        const requestPromise = (async () => {
+            try {
+                const response = await this.mockApiCall(
+                    '/parent/dashboard',
+                    'GET',
+                    { childId: currentUser.data?.id || 'child-001' }
+                );
+
+                if (!response.ok) {
+                    throw new Error(response.error || 'Failed to load dashboard');
+                }
+
+                if (wrapper) {
+                    this.hideOverlay(wrapper);
+                }
+
+                return response.data;
+            } catch (error) {
+                console.error('Dashboard fetch error:', error);
+                if (wrapper) {
+                    this.showErrorState(
+                        wrapper,
+                        'Dashboard Unavailable',
+                        error.message || 'Failed to load your dashboard. Please try again.',
+                        () => this.fetchParentDashboard(statusMessage)
+                    );
+                }
+                throw error;
+            } finally {
+                this.uiState.activeRequest = null;
+            }
+        })();
+
+        this.uiState.activeRequest = requestPromise;
+        return requestPromise;
+    },
     async fetchParentDashboard() {
         const wrapper = document.getElementById('parent-panel-wrapper');
         this.showLoadingState(wrapper, 'Loading your dashboard...');
@@ -2790,9 +2957,26 @@ const ParentPortalController = {
             if (input) input.value = '';
             showMessageToast('Message sent successfully!');
 
-            // Re-render chat with new message
-            renderParentChat();
-            return response.data;
+            const apiMessage = response.data;
+            const newMessage = {
+                id: apiMessage.id,
+                sender: 'You',
+                timestamp: formatParentChatTimestamp(apiMessage.timestamp),
+                message: apiMessage.message
+            };
+
+            PARENT_CHAT_MESSAGES.push(newMessage);
+
+            if (parentDashboardData) {
+                const updatedMessages = [...(parentDashboardData.messages || []), newMessage];
+                const updatedDashboard = normalizeParentDashboardData({
+                    ...parentDashboardData,
+                    messages: updatedMessages
+                });
+                updateParentDashboardUI(updatedDashboard);
+            }
+
+            return apiMessage;
 
         } catch (error) {
             console.error('Message send error:', error);
@@ -2832,6 +3016,7 @@ const ParentPortalController = {
                     events: PARENT_EVENTS,
                     gallery: PARENT_GALLERY_ITEMS,
                     messages: PARENT_CHAT_MESSAGES,
+                    followup: PARENT_FOLLOWUP,
                     reports: {
                         attendance: '92%',
                         memoryVerse: 'In Progress',
@@ -2879,6 +3064,21 @@ const ParentPortalController = {
     }
 };
 
+async function ensureParentDashboardData({ forceRefresh = false, statusMessage = 'Loading your dashboard...' } = {}) {
+    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
+        return null;
+    }
+
+    if (parentDashboardData && !forceRefresh) {
+        return parentDashboardData;
+    }
+
+    const dashboardData = await ParentPortalController.fetchParentDashboard(statusMessage);
+    const normalized = normalizeParentDashboardData(dashboardData);
+    updateParentDashboardUI(normalized);
+    return parentDashboardData;
+}
+
 /**
  * Update parent view with fetched dashboard data
  * Called after successful login and data fetch
@@ -2890,11 +3090,10 @@ async function updateParentViewAfterLogin() {
     }
 
     try {
-        // Fetch dashboard data
-        const dashboardData = await ParentPortalController.fetchParentDashboard();
-        
-        // Update UI with fresh data
-        updateParentDashboardUI(dashboardData);
+        await ensureParentDashboardData({
+            forceRefresh: true,
+            statusMessage: 'Preparing your family dashboard...'
+        });
 
         // Show success feedback
         showMessageToast('Welcome back! Dashboard updated.');
@@ -2908,6 +3107,54 @@ async function updateParentViewAfterLogin() {
  * Update parent dashboard UI with fresh data
  * @param {Object} dashboardData - Data from /parent/dashboard endpoint
  */
+function updateParentDashboardUI(dashboardData) {
+    if (!dashboardData) return;
+
+    parentDashboardData = dashboardData;
+
+    const childNameEl = document.querySelector('[data-dashboard-child-name]');
+    const classNameEl = document.querySelector('[data-dashboard-class-name]');
+    const teacherNameEl = document.querySelector('[data-dashboard-teacher-name]');
+
+    if (childNameEl) childNameEl.textContent = dashboardData.childName;
+    if (classNameEl) classNameEl.textContent = dashboardData.className;
+    if (teacherNameEl) teacherNameEl.textContent = dashboardData.teacher;
+
+    const galleryButton = document.querySelector('.parent-panel-trigger[data-panel="gallery"]');
+    if (galleryButton) {
+        const galleryCount = dashboardData.gallery?.length || 0;
+        const label = galleryCount === 1 ? '1 photo' : `${galleryCount} photos`;
+        galleryButton.textContent = galleryCount ? `View Gallery (${label})` : 'View Gallery';
+    }
+
+    const chatButton = document.querySelector('.parent-panel-trigger[data-panel="chat"]');
+    if (chatButton) {
+        const messageCount = dashboardData.messages?.length || 0;
+        chatButton.textContent = messageCount ? `Open Messages (${messageCount})` : 'Start Chat';
+    }
+
+    const eventsButton = document.querySelector('.parent-panel-trigger[data-panel="events"]');
+    if (eventsButton) {
+        const eventCount = dashboardData.events?.length || 0;
+        eventsButton.textContent = eventCount ? `View Events (${eventCount})` : 'View Events';
+    }
+
+    const reportsButton = document.querySelector('.parent-panel-trigger[data-panel="reports"]');
+    if (reportsButton) {
+        reportsButton.textContent = 'View Reports';
+    }
+
+    const loginAnnouncement = document.getElementById('parent-login-announcement');
+    if (loginAnnouncement) {
+        loginAnnouncement.textContent = formatParentLoginAnnouncement();
+    }
+
+    if (parentPanelState.activePanel !== 'default') {
+        renderActiveParentPanel();
+    }
+
+    console.log('Parent dashboard updated with fresh data:', dashboardData);
+}
 function updateParentDashboardUI(dashboardData) {
     if (!dashboardData) return;
 
