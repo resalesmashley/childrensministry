@@ -831,6 +831,15 @@ function handleParentLogin(event) {
             updateParentViewAfterLogin();
         }, 100);
     } else {
+
+        document.getElementById('parent-name').textContent = account.name;
+
+        showPage('parent-dashboard');
+
+        setTimeout(() => {
+            updateParentViewAfterLogin();
+        }, 100);
+    } else {
         alert('Invalid credentials. Please check your email and password.');
     }
 }
@@ -2877,6 +2886,35 @@ const ParentPortalController = {
         this.uiState.activeRequest = requestPromise;
         return requestPromise;
     },
+    async fetchParentDashboard() {
+        const wrapper = document.getElementById('parent-panel-wrapper');
+        this.showLoadingState(wrapper, 'Loading your dashboard...');
+
+        try {
+            // Simulate API call to GET /parent/dashboard
+            const response = await this.mockApiCall(
+                '/parent/dashboard',
+                'GET',
+                { childId: currentUser.data?.id || 'child-001' }
+            );
+
+            if (!response.ok) {
+                throw new Error(response.error || 'Failed to load dashboard');
+            }
+
+            this.hideOverlay(wrapper);
+            return response.data;
+        } catch (error) {
+            console.error('Dashboard fetch error:', error);
+            this.showErrorState(
+                wrapper,
+                'Dashboard Unavailable',
+                error.message || 'Failed to load your dashboard. Please try again.',
+                () => this.fetchParentDashboard()
+            );
+            throw error;
+        }
+    },
 
     /**
      * Send parent message via POST /parent/message
@@ -3113,6 +3151,24 @@ function updateParentDashboardUI(dashboardData) {
 
     if (parentPanelState.activePanel !== 'default') {
         renderActiveParentPanel();
+    }
+
+    console.log('Parent dashboard updated with fresh data:', dashboardData);
+}
+function updateParentDashboardUI(dashboardData) {
+    if (!dashboardData) return;
+
+    const childNameEl = document.querySelector('[data-dashboard-child-name]');
+    const classNameEl = document.querySelector('[data-dashboard-class-name]');
+    const teacherNameEl = document.querySelector('[data-dashboard-teacher-name]');
+
+    if (childNameEl) childNameEl.textContent = dashboardData.childName;
+    if (classNameEl) classNameEl.textContent = dashboardData.className;
+    if (teacherNameEl) teacherNameEl.textContent = dashboardData.teacher;
+
+    const loginAnnouncement = document.getElementById('parent-login-announcement');
+    if (loginAnnouncement) {
+        loginAnnouncement.textContent = formatParentLoginAnnouncement();
     }
 
     console.log('Parent dashboard updated with fresh data:', dashboardData);
