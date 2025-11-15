@@ -66,21 +66,21 @@
             <div class="container">
                 <div class="sub-nav">
                     <ul>
-                        <li><a href="#" onclick="showPage('home'); return false;" class="active" id="nav-home">Overview</a></li>
-                        <li><a href="#" onclick="showPage('about'); return false;" id="nav-about">About Us</a></li>
-                        <li><a href="#" onclick="showPage('staff'); return false;" id="nav-staff">Our Team</a></li>
-                        <li><a href="#" onclick="showPage('prek'); return false;" id="nav-prek">Pre-K</a></li>
-                        <li><a href="#" onclick="showPage('elementary'); return false;" id="nav-elementary">Elementary</a></li>
-                        <li><a href="#" onclick="showPage('events'); return false;" id="nav-events">Events</a></li>
-                        <li><a href="#" onclick="showPage('volunteer'); return false;" id="nav-volunteer">Volunteer</a></li>
-                        <li><a href="#" onclick="showPage('resources'); return false;" id="nav-resources">Resources</a></li>
-                        <li><a href="#" onclick="showPage('shop'); return false;" id="nav-shop">Marketplace</a></li>
-                        <li><a href="#" onclick="showPage('cart'); return false;" id="nav-cart">Cart <span class="cart-count-badge" id="cart-count" hidden>0</span></a></li>
-                        <li><a href="#" onclick="showPage('order-status'); return false;" id="nav-order-status">Order Status</a></li>
-                        <li><a href="#" onclick="showPage('customer-support'); return false;" id="nav-customer-support">Support</a></li>
-                        <li><a href="#" onclick="showPage('gallery'); return false;" id="nav-gallery">Gallery</a></li>
-                        <li><a href="#" onclick="showPage('portals'); return false;" id="nav-portals">Portals</a></li>
-                        <li><a href="#" onclick="showPage('contact'); return false;" id="nav-contact">Contact</a></li>
+                        <li><a href="#" data-target="home" class="active" id="nav-home">Overview</a></li>
+                        <li><a href="#" data-target="about" id="nav-about">About Us</a></li>
+                        <li><a href="#" data-target="staff" id="nav-staff">Our Team</a></li>
+                        <li><a href="#" data-target="prek" id="nav-prek">Pre-K</a></li>
+                        <li><a href="#" data-target="elementary" id="nav-elementary">Elementary</a></li>
+                        <li><a href="#" data-target="events" id="nav-events">Events</a></li>
+                        <li><a href="#" data-target="volunteer" id="nav-volunteer">Volunteer</a></li>
+                        <li><a href="#" data-target="resources" id="nav-resources">Resources</a></li>
+                        <li><a href="#" data-target="shop" id="nav-shop">Marketplace</a></li>
+                        <li><a href="#" data-target="cart" id="nav-cart">Cart <span class="cart-count-badge" id="cart-count" hidden>0</span></a></li>
+                        <li><a href="#" data-target="order-status" id="nav-order-status">Order Status</a></li>
+                        <li><a href="#" data-target="customer-support" id="nav-customer-support">Support</a></li>
+                        <li><a href="#" data-target="gallery" id="nav-gallery">Gallery</a></li>
+                        <li><a href="#" data-target="portals" id="nav-portals">Portals</a></li>
+                        <li><a href="#" data-target="contact" id="nav-contact">Contact</a></li>
                     </ul>
                 </div>
 
@@ -534,25 +534,25 @@
                                 <div class="card-icon">📸</div>
                                 <h3>Class Photos</h3>
                                 <p>View and download photos from Emma's classroom activities.</p>
-                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="gallery" onclick="openParentPanel('gallery'); return false;">View Gallery (5 new)</a>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="gallery">View Gallery (5 new)</a>
                             </div>
                             <div class="card portal-feature-card" data-parent-panel="chat">
                                 <div class="card-icon">💬</div>
                                 <h3>Message Teacher</h3>
                                 <p>Send a secure message to Sarah Martinez.</p>
-                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="chat" onclick="openParentChat(); return false;">Start Chat</a>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="chat">Start Chat</a>
                             </div>
                             <div class="card portal-feature-card" data-parent-panel="events">
                                 <div class="card-icon">📅</div>
                                 <h3>Event Registration</h3>
                                 <p>Register Emma for upcoming events and activities.</p>
-                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="events" onclick="openParentPanel('events'); return false;">View Events</a>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="events">View Events</a>
                             </div>
                             <div class="card portal-feature-card" data-parent-panel="reports">
                                 <div class="card-icon">📋</div>
                                 <h3>Attendance & Reports</h3>
                                 <p>View Emma's attendance history and progress reports.</p>
-                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="reports" onclick="openParentPanel('reports'); return false;">View Reports</a>
+                                <a href="#" class="btn btn-secondary parent-panel-trigger" data-panel="reports">View Reports</a>
                             </div>
                         </div>
 
@@ -563,7 +563,7 @@
                                     <h3 id="parent-panel-title">Family tools</h3>
                                     <p id="parent-panel-subtitle">Select a feature card above to load details here.</p>
                                 </div>
-                                <button type="button" class="btn btn-secondary parent-panel-reset" onclick="resetParentPanel()">Reset view</button>
+                                <button type="button" class="btn btn-secondary parent-panel-reset">Reset view</button>
                             </div>
 
                             <section id="parent-panel-default" class="parent-panel-section active">
@@ -593,7 +593,7 @@
                                     <textarea id="parent-chat-input" rows="3" required placeholder="Type your message to Sarah..."></textarea>
                                     <div class="parent-chat-actions">
                                         <button type="submit" class="btn">Send Message</button>
-                                        <button type="button" class="btn btn-secondary" onclick="openParentPanel('chat')">Refresh</button>
+                                        <button type="button" class="btn btn-secondary parent-panel-refresh" data-refresh-panel="chat">Refresh</button>
                                     </div>
                                 </form>
                             </section>
@@ -629,7 +629,7 @@
                                 </div>
                                 <div class="parent-report-actions parent-chat-actions">
                                     <button type="button" class="btn" onclick="downloadParentReport()">Download PDF Summary</button>
-                                    <button type="button" class="btn btn-secondary" onclick="openParentPanel('reports')">Refresh</button>
+                                    <button type="button" class="btn btn-secondary parent-panel-refresh" data-refresh-panel="reports">Refresh</button>
                                 </div>
                             </section>
                         </div>

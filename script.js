@@ -397,6 +397,11 @@ function showPage(pageName) {
                      'portals', 'parent-portal', 'teacher-portal', 'contact', 'parent-dashboard',
                      'teacher-dashboard', 'lesson-plan-builder', 'resource-library',
                      'teacher-messages', 'admin-dashboard'];
+    const pageIds = ['home', 'about', 'staff', 'prek', 'elementary', 'events', 'volunteer',
+                     'resources', 'shop', 'cart', 'order-status', 'customer-support', 'gallery',
+                     'portals', 'parent-portal', 'teacher-portal', 'contact', 'parent-dashboard',
+                     'teacher-dashboard', 'lesson-plan-builder', 'resource-library',
+                     'teacher-messages', 'admin-dashboard'];
     
     pageIds.forEach(page => {
         const element = document.getElementById(page + '-page');
@@ -423,6 +428,14 @@ function showPage(pageName) {
         'prek': 'Pre-K Ministry',
         'elementary': 'Elementary Ministry',
         'events': 'Events & Activities',
+        'volunteer': 'Volunteer',
+        'resources': 'Resources',
+        'shop': 'Marketplace',
+        'cart': 'Shopping Cart',
+        'order-status': 'Order Status',
+        'customer-support': 'Customer Support',
+        'gallery': 'Photo Gallery',
+        'portals': 'Portal Access',
         'volunteer': 'Volunteer',
         'resources': 'Resources',
         'shop': 'Marketplace',
@@ -476,6 +489,37 @@ function showPage(pageName) {
         renderResourceLibrary();
     }
 
+    if (pageName === 'teacher-messages') {
+        setTimeout(() => {
+            loadConversations();
+        }, 100);
+    }
+
+    if (pageName === 'shop') {
+        renderProductCatalog();
+    }
+
+    if (pageName === 'cart') {
+        renderCart();
+    }
+
+    if (pageName === 'order-status') {
+        const orderInput = document.getElementById('order-status-id');
+        if (orderInput) {
+            setTimeout(() => orderInput.focus(), 150);
+        }
+    }
+
+    if (pageName === 'customer-support') {
+        initializeCustomerChat();
+        const chatInput = document.getElementById('customer-chat-input');
+        if (chatInput) {
+            setTimeout(() => chatInput.focus(), 200);
+        }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
     if (pageName === 'teacher-messages') {
         setTimeout(() => {
             loadConversations();
@@ -831,6 +875,27 @@ function handleParentLogin(event) {
             updateParentViewAfterLogin();
         }, 100);
     } else {
+        alert('Invalid credentials. Please check your email and password.');
+    const password = document.getElementById('parent-password').value;
+
+    const account = findParentAccountByEmail(email);
+
+    if (account && password === account.password) {
+        currentUser = {
+            type: 'parent',
+            loggedIn: true,
+            data: account
+        };
+
+        document.getElementById('parent-name').textContent = account.name;
+
+        showPage('parent-dashboard');
+        resetParentPanel();
+
+        setTimeout(() => {
+            updateParentViewAfterLogin();
+        }, 100);
+    } else {
 
         document.getElementById('parent-name').textContent = account.name;
 
@@ -1018,11 +1083,124 @@ function formatParentChatTimestamp(timestamp) {
     return `${datePart} • ${timePart}`;
 }
 
+let parentDashboardData = null;
+
+function normalizeParentDashboardData(raw = {}) {
+    return {
+        childId: raw.childId || currentUser.data?.child?.id || 'child-001',
+        childName: raw.childName || currentUser.data?.child?.name || 'Emma Smith',
+        className: raw.className || currentUser.data?.child?.class || 'Pre-K Room A',
+        teacher: raw.teacher || currentUser.data?.child?.teacher || 'Sarah Martinez',
+        lastUpdated: raw.lastUpdated || new Date().toISOString(),
+        gallery: Array.isArray(raw.gallery) && raw.gallery.length ? [...raw.gallery] : [...PARENT_GALLERY_ITEMS],
+        messages: Array.isArray(raw.messages) && raw.messages.length ? [...raw.messages] : [...PARENT_CHAT_MESSAGES],
+        events: Array.isArray(raw.events) && raw.events.length ? [...raw.events] : [...PARENT_EVENTS],
+        attendance: Array.isArray(raw.attendance) && raw.attendance.length ? [...raw.attendance] : [...PARENT_ATTENDANCE],
+        followup: Array.isArray(raw.followup) && raw.followup.length ? [...raw.followup] : [...PARENT_FOLLOWUP],
+        reports: raw.reports ? { ...raw.reports } : {
+            attendance: '92%',
+            memoryVerse: 'In Progress',
+            nextStep: 'Encourage Emma to bring a friend to Fall Festival'
+        }
+    };
+}
+
+function renderActiveParentPanel() {
+    switch (parentPanelState.activePanel) {
+        case 'gallery':
+            renderParentGallery();
+            break;
+        case 'chat':
+            renderParentChat();
+            break;
+        case 'events':
+            renderParentEvents();
+            break;
+        case 'reports':
+            renderParentReports();
+            break;
+        default:
+            break;
+    }
+}
+
+function formatParentChatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    if (Number.isNaN(date.getTime())) {
+        return timestamp;
+    }
+
+    const datePart = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const timePart = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return `${datePart} • ${timePart}`;
+}
+
 function resetParentPanel() {
     parentPanelState.activePanel = 'default';
     updateParentPanelUI();
 }
 
+async function openParentPanel(panelName) {
+    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
+        showMessageToast('Please log in to the Parent Portal to access this tool.');
+        return false;
+    }
+
+    const statusMessages = {
+        gallery: 'Loading classroom photos...',
+        chat: 'Opening your messages...',
+        events: 'Checking upcoming events...',
+        reports: 'Preparing your reports...'
+    };
+
+    try {
+        await ensureParentDashboardData({
+            forceRefresh: !parentDashboardData,
+            statusMessage: statusMessages[panelName] || 'Loading your family tools...'
+        });
+    } catch (error) {
+        console.error('Unable to load parent dashboard data:', error);
+        showMessageToast('We could not load that tool. Please try again.');
+        return false;
+    }
+
+    parentPanelState.activePanel = panelName;
+
+    switch (panelName) {
+        case 'gallery':
+            renderParentGallery();
+            updateParentPanelTitle('Class Photos', 'Latest uploads from Emma\'s classroom.');
+            break;
+        case 'chat':
+            renderParentChat();
+            updateParentPanelTitle('Message Teacher', 'Continue your conversation with Sarah Martinez.');
+            break;
+        case 'events':
+            renderParentEvents();
+            updateParentPanelTitle('Event Registration', 'Review Emma\'s registrations and upcoming events.');
+            break;
+        case 'reports':
+            renderParentReports();
+            updateParentPanelTitle('Attendance & Reports', 'See attendance history and suggested at-home follow-ups.');
+            break;
+        default:
+            resetParentPanel();
+            return false;
+    }
+
+    updateParentPanelUI();
+    return true;
+}
+
+async function openParentChat() {
+    const opened = await openParentPanel('chat');
+    if (!opened) return;
+
+    const input = document.getElementById('parent-chat-input');
+    if (input && !input.disabled) {
+        input.focus();
+    }
+}
 async function openParentPanel(panelName) {
     if (!currentUser.loggedIn || currentUser.type !== 'parent') {
         showMessageToast('Please log in to the Parent Portal to access this tool.');
@@ -1135,6 +1313,23 @@ function renderParentGallery() {
             <div class="parent-gallery-meta">
                 <span>${item.date}</span>
                 <h5>${item.title}</h5>
+function renderParentGallery() {
+    const grid = document.getElementById('parent-gallery-grid');
+    if (!grid) return;
+
+    const galleryItems = parentDashboardData?.gallery ?? PARENT_GALLERY_ITEMS;
+
+    if (galleryItems.length === 0) {
+        grid.innerHTML = '<p class="panel-empty">No photos available yet. Check back after Sunday service.</p>';
+        return;
+    }
+
+    grid.innerHTML = galleryItems.map(item => `
+        <article class="parent-gallery-card">
+            <img src="${item.thumbnail}" alt="${item.title}" loading="lazy" />
+            <div class="parent-gallery-meta">
+                <span>${item.date}</span>
+                <h5>${item.title}</h5>
                 <p>${item.description}</p>
                 <button class="btn btn-secondary" onclick="alert('Downloading photo: ${item.title} (Demo)')">Download</button>
             </div>
@@ -1142,6 +1337,47 @@ function renderParentGallery() {
     `).join('');
 }
 
+function renderParentChat() {
+    const thread = document.getElementById('parent-chat-thread');
+    if (!thread) return;
+
+    const messages = parentDashboardData?.messages ?? PARENT_CHAT_MESSAGES;
+
+    if (!messages.length) {
+        thread.innerHTML = '<p class="panel-empty">No messages yet. Start the conversation with your teacher!</p>';
+        return;
+    }
+
+    thread.innerHTML = messages.map(message => `
+        <div class="parent-chat-bubble ${message.sender === 'You' ? 'from-parent' : 'from-teacher'}">
+            <div class="parent-chat-meta">
+                <strong>${message.sender}</strong>
+                <span>${message.timestamp}</span>
+            </div>
+            <p>${message.message}</p>
+        </div>
+    `).join('');
+
+    thread.scrollTop = thread.scrollHeight;
+}
+
+function renderParentEvents() {
+    const list = document.getElementById('parent-events-list');
+    if (!list) return;
+
+    const events = parentDashboardData?.events ?? PARENT_EVENTS;
+
+    if (!events.length) {
+        list.innerHTML = '<p class="panel-empty">No upcoming events right now. Check back soon for new opportunities.</p>';
+        return;
+    }
+
+    list.innerHTML = events.map(event => `
+        <article class="parent-event-card">
+            <header>
+                <h5>${event.name}</h5>
+                <span class="parent-event-status ${event.status.replace(/\s+/g, '-').toLowerCase()}">${event.status}</span>
+            </header>
 function renderParentChat() {
     const thread = document.getElementById('parent-chat-thread');
     if (!thread) return;
@@ -1193,6 +1429,65 @@ function renderParentEvents() {
     `).join('');
 }
 
+function renderParentReports() {
+    const cardsContainer = document.getElementById('parent-report-cards');
+    const tableBody = document.getElementById('parent-attendance-body');
+    const followupList = document.getElementById('parent-followup-list');
+
+    const reports = parentDashboardData?.reports || {
+        attendance: '92%',
+        memoryVerse: 'In Progress',
+        nextStep: 'Encourage Emma to bring a friend to Fall Festival'
+    };
+    const attendance = parentDashboardData?.attendance ?? PARENT_ATTENDANCE;
+    const followup = parentDashboardData?.followup ?? PARENT_FOLLOWUP;
+
+    if (cardsContainer) {
+        cardsContainer.innerHTML = `
+            <article class="parent-report-card">
+                <h5>Attendance</h5>
+                <p><strong>${reports.attendance || '—'}</strong> attendance across the past 3 months.</p>
+            </article>
+            <article class="parent-report-card">
+                <h5>Memory Verse</h5>
+                <p>${reports.memoryVerse || 'Progress update coming soon.'}</p>
+            </article>
+            <article class="parent-report-card">
+                <h5>Next Step</h5>
+                <p>${reports.nextStep || 'Check back soon for a suggested next step.'}</p>
+            </article>
+        `;
+    }
+
+    if (tableBody) {
+        if (!attendance.length) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="4">Attendance details will appear after Emma's next check-in.</td>
+                </tr>
+            `;
+        } else {
+            tableBody.innerHTML = attendance.map(row => {
+                const totalSessions = row.total || 0;
+                const percentage = totalSessions ? Math.round((row.present / totalSessions) * 100) : 0;
+                return `
+                    <tr>
+                        <td>${row.month}</td>
+                        <td>${row.present}</td>
+                        <td>${row.total}</td>
+                        <td>${percentage}%</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    if (followupList) {
+        followupList.innerHTML = followup.length
+            ? followup.map(item => `<li>${item}</li>`).join('')
+            : '<li>No follow-up steps right now. Enjoy time together as a family!</li>';
+    }
+}
 function renderParentReports() {
     const cardsContainer = document.getElementById('parent-report-cards');
     const tableBody = document.getElementById('parent-attendance-body');
@@ -2018,10 +2313,80 @@ function handleContactForm(event) {
     event.target.reset();
 }
 
+function initializeSubNavigation() {
+    const subNav = document.querySelector('.sub-nav');
+    if (!subNav || subNav.dataset.bound === 'true') return;
+
+    subNav.addEventListener('click', event => {
+        const link = event.target.closest('a[data-target]');
+        if (!link || !subNav.contains(link)) {
+            return;
+        }
+
+        const target = link.getAttribute('data-target');
+        if (!target) {
+            return;
+        }
+
+        event.preventDefault();
+        showPage(target);
+    });
+
+    subNav.dataset.bound = 'true';
+}
+
+function initializeParentDashboardControls() {
+    const triggers = document.querySelectorAll('.parent-panel-trigger');
+    triggers.forEach(trigger => {
+        if (trigger.dataset.bound === 'true') return;
+
+        trigger.addEventListener('click', async event => {
+            event.preventDefault();
+            const panel = trigger.getAttribute('data-panel');
+            if (!panel) return;
+
+            if (panel === 'chat') {
+                await openParentChat();
+                return;
+            }
+
+            await openParentPanel(panel);
+        });
+
+        trigger.dataset.bound = 'true';
+    });
+
+    const resetButton = document.querySelector('.parent-panel-reset');
+    if (resetButton && resetButton.dataset.bound !== 'true') {
+        resetButton.addEventListener('click', event => {
+            event.preventDefault();
+            resetParentPanel();
+        });
+        resetButton.dataset.bound = 'true';
+    }
+
+    const refreshButtons = document.querySelectorAll('[data-refresh-panel]');
+    refreshButtons.forEach(button => {
+        if (button.dataset.bound === 'true') return;
+
+        button.addEventListener('click', async event => {
+            event.preventDefault();
+            const panel = button.getAttribute('data-refresh-panel');
+            if (!panel) return;
+            await openParentPanel(panel);
+        });
+
+        button.dataset.bound = 'true';
+    });
+}
+
 // Document Ready
 document.addEventListener('DOMContentLoaded', function() {
     renderLessonPlans();
     renderClassCodesList();
+
+    initializeSubNavigation();
+    initializeParentDashboardControls();
 
     const forms = document.querySelectorAll('form:not(#parent-login-form):not(#teacher-login-form):not(#lesson-plan-form):not(#admin-login-form)');
     forms.forEach(form => {
@@ -2366,6 +2731,16 @@ function showAdminParentPanel() {
     }
 }
 
+function formatParentLoginAnnouncement() {
+    const accounts = getAllParentAccounts();
+    const latest = accounts[0];
+    if (!latest) {
+        return 'Sign in with your email and password to access family updates.';
+    }
+
+    const classroom = getClassById(latest.classId);
+    return `${latest.name} connected for ${classroom?.displayName || latest.classId}.`;
+}
 function formatParentLoginAnnouncement() {
     const accounts = getAllParentAccounts();
     const latest = accounts[0];
@@ -2771,6 +3146,67 @@ const ParentPortalController = {
 
     /**
      * Show error state UI with retry option
+const ParentPortalController = {
+
+    // UI State trackers
+    uiState: {
+        isLoading: false,
+        error: null,
+        activeRequest: null
+    },
+
+    getOverlay(container, createIfMissing = true) {
+        if (!container) return null;
+
+        let overlay = container.querySelector('.parent-panel-overlay');
+        if (!overlay && createIfMissing) {
+            overlay = document.createElement('div');
+            overlay.className = 'parent-panel-overlay';
+            overlay.setAttribute('hidden', '');
+            container.prepend(overlay);
+        }
+
+        return overlay;
+    },
+
+    hideOverlay(container) {
+        const overlay = this.getOverlay(container, false);
+        if (!overlay) return;
+
+        overlay.innerHTML = '';
+        overlay.hidden = true;
+        container.classList.remove('state-loading', 'state-error');
+        this.uiState.isLoading = false;
+        this.uiState.error = null;
+    },
+
+    /**
+     * Show loading state UI overlay
+     * @param {HTMLElement} container - Target container for loading state
+     * @param {string} message - Optional loading message
+     */
+    showLoadingState(container, message = 'Loading...') {
+        if (!container) return;
+
+        const overlay = this.getOverlay(container);
+        if (!overlay) return;
+
+        const loadingHTML = `
+            <div class="parent-loading-state" role="status" aria-busy="true">
+                <div class="loading-spinner"></div>
+                <p class="loading-message">${message}</p>
+            </div>
+        `;
+
+        overlay.innerHTML = loadingHTML;
+        overlay.hidden = false;
+        container.classList.add('state-loading');
+        container.classList.remove('state-error');
+        this.uiState.isLoading = true;
+    },
+
+    /**
+     * Show error state UI with retry option
      * @param {HTMLElement} container - Target container for error state
      * @param {string} title - Error title
      * @param {string} message - Error description
@@ -2835,11 +3271,115 @@ const ParentPortalController = {
         this.hideOverlay(wrapper);
         resetParentPanel();
     },
+        if (!container) return;
+
+        const overlay = this.getOverlay(container);
+        if (!overlay) return;
+
+        const retryButton = onRetry
+            ? '<button type="button" class="btn btn-secondary" data-parent-overlay-retry>Retry</button>'
+            : '';
+
+        const errorHTML = `
+            <div class="parent-error-state" role="alert">
+                <div class="error-icon">⚠️</div>
+                <h4>${title}</h4>
+                <p>${message}</p>
+                <div class="error-actions">
+                    ${retryButton}
+                    <button type="button" class="btn btn-secondary" data-parent-overlay-close>Close</button>
+                </div>
+            </div>
+        `;
+
+        overlay.innerHTML = errorHTML;
+        overlay.hidden = false;
+        container.classList.add('state-error');
+        container.classList.remove('state-loading');
+        this.uiState.isLoading = false;
+        this.uiState.error = message;
+
+        // Attach retry handler if provided
+        if (onRetry) {
+            const retryBtn = overlay.querySelector('[data-parent-overlay-retry]');
+            if (retryBtn) {
+                retryBtn.addEventListener('click', event => {
+                    event.preventDefault();
+                    onRetry();
+                });
+            }
+        }
+
+        const closeBtn = overlay.querySelector('[data-parent-overlay-close]');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', event => {
+                event.preventDefault();
+                this.showDefaultState();
+            });
+        }
+    },
+
+    /**
+     * Clear loading/error state and show default empty state
+     */
+    showDefaultState() {
+        const wrapper = document.getElementById('parent-panel-wrapper');
+        if (!wrapper) return;
+
+        this.hideOverlay(wrapper);
+        resetParentPanel();
+    },
 
     /**
      * Fetch parent dashboard data from GET /parent/dashboard
      * @returns {Promise<Object>} Dashboard data
      */
+    async fetchParentDashboard(statusMessage = 'Loading your dashboard...') {
+        if (this.uiState.activeRequest) {
+            return this.uiState.activeRequest;
+        }
+
+        const wrapper = document.getElementById('parent-panel-wrapper');
+        if (wrapper) {
+            this.showLoadingState(wrapper, statusMessage);
+        }
+
+        const requestPromise = (async () => {
+            try {
+                const response = await this.mockApiCall(
+                    '/parent/dashboard',
+                    'GET',
+                    { childId: currentUser.data?.id || 'child-001' }
+                );
+
+                if (!response.ok) {
+                    throw new Error(response.error || 'Failed to load dashboard');
+                }
+
+                if (wrapper) {
+                    this.hideOverlay(wrapper);
+                }
+
+                return response.data;
+            } catch (error) {
+                console.error('Dashboard fetch error:', error);
+                if (wrapper) {
+                    this.showErrorState(
+                        wrapper,
+                        'Dashboard Unavailable',
+                        error.message || 'Failed to load your dashboard. Please try again.',
+                        () => this.fetchParentDashboard(statusMessage)
+                    );
+                }
+                throw error;
+            } finally {
+                this.uiState.activeRequest = null;
+            }
+        })();
+
+        this.uiState.activeRequest = requestPromise;
+        return requestPromise;
+    },
     async fetchParentDashboard(statusMessage = 'Loading your dashboard...') {
         if (this.uiState.activeRequest) {
             return this.uiState.activeRequest;
@@ -2982,6 +3522,34 @@ const ParentPortalController = {
             console.error('Message send error:', error);
             showMessageToast('Failed to send message. Please try again.');
             throw error;
+            if (input) input.value = '';
+            showMessageToast('Message sent successfully!');
+
+            const apiMessage = response.data;
+            const newMessage = {
+                id: apiMessage.id,
+                sender: 'You',
+                timestamp: formatParentChatTimestamp(apiMessage.timestamp),
+                message: apiMessage.message
+            };
+
+            PARENT_CHAT_MESSAGES.push(newMessage);
+
+            if (parentDashboardData) {
+                const updatedMessages = [...(parentDashboardData.messages || []), newMessage];
+                const updatedDashboard = normalizeParentDashboardData({
+                    ...parentDashboardData,
+                    messages: updatedMessages
+                });
+                updateParentDashboardUI(updatedDashboard);
+            }
+
+            return apiMessage;
+
+        } catch (error) {
+            console.error('Message send error:', error);
+            showMessageToast('Failed to send message. Please try again.');
+            throw error;
         } finally {
             // Re-enable form
             if (submitBtn) submitBtn.disabled = false;
@@ -3012,6 +3580,16 @@ const ParentPortalController = {
                     className: currentUser.data?.child?.class || 'Pre-K Room A',
                     teacher: currentUser.data?.child?.teacher || 'Sarah Martinez',
                     lastUpdated: new Date().toISOString(),
+                    attendance: PARENT_ATTENDANCE,
+                    events: PARENT_EVENTS,
+                    gallery: PARENT_GALLERY_ITEMS,
+                    messages: PARENT_CHAT_MESSAGES,
+                    followup: PARENT_FOLLOWUP,
+                    reports: {
+                        attendance: '92%',
+                        memoryVerse: 'In Progress',
+                        nextStep: 'Encourage Emma to bring a friend to Fall Festival'
+                    }
                     attendance: PARENT_ATTENDANCE,
                     events: PARENT_EVENTS,
                     gallery: PARENT_GALLERY_ITEMS,
@@ -3102,11 +3680,938 @@ async function updateParentViewAfterLogin() {
         // Error state is already shown by fetchParentDashboard()
     }
 }
+async function ensureParentDashboardData({ forceRefresh = false, statusMessage = 'Loading your dashboard...' } = {}) {
+    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
+        return null;
+    }
+
+    if (parentDashboardData && !forceRefresh) {
+        return parentDashboardData;
+    }
+
+    const dashboardData = await ParentPortalController.fetchParentDashboard(statusMessage);
+    const normalized = normalizeParentDashboardData(dashboardData);
+    updateParentDashboardUI(normalized);
+    return parentDashboardData;
+}
+
+/**
+ * Update parent view with fetched dashboard data
+ * Called after successful login and data fetch
+ */
+async function updateParentViewAfterLogin() {
+    if (!currentUser.loggedIn || currentUser.type !== 'parent') {
+        console.warn('Not logged in as parent');
+        return;
+    }
+
+    try {
+        await ensureParentDashboardData({
+            forceRefresh: true,
+            statusMessage: 'Preparing your family dashboard...'
+        });
+
+        // Show success feedback
+        showMessageToast('Welcome back! Dashboard updated.');
+    } catch (error) {
+        console.error('Failed to update parent view:', error);
+        // Error state is already shown by fetchParentDashboard()
+    }
+}
 
 /**
  * Update parent dashboard UI with fresh data
  * @param {Object} dashboardData - Data from /parent/dashboard endpoint
  */
+function updateParentDashboardUI(dashboardData) {
+    if (!dashboardData) return;
+
+    parentDashboardData = dashboardData;
+
+    const childNameEl = document.querySelector('[data-dashboard-child-name]');
+    const classNameEl = document.querySelector('[data-dashboard-class-name]');
+    const teacherNameEl = document.querySelector('[data-dashboard-teacher-name]');
+
+    if (childNameEl) childNameEl.textContent = dashboardData.childName;
+    if (classNameEl) classNameEl.textContent = dashboardData.className;
+    if (teacherNameEl) teacherNameEl.textContent = dashboardData.teacher;
+
+    const galleryButton = document.querySelector('.parent-panel-trigger[data-panel="gallery"]');
+    if (galleryButton) {
+        const galleryCount = dashboardData.gallery?.length || 0;
+        const label = galleryCount === 1 ? '1 photo' : `${galleryCount} photos`;
+        galleryButton.textContent = galleryCount ? `View Gallery (${label})` : 'View Gallery';
+    }
+
+    const chatButton = document.querySelector('.parent-panel-trigger[data-panel="chat"]');
+    if (chatButton) {
+        const messageCount = dashboardData.messages?.length || 0;
+        chatButton.textContent = messageCount ? `Open Messages (${messageCount})` : 'Start Chat';
+    }
+
+    const eventsButton = document.querySelector('.parent-panel-trigger[data-panel="events"]');
+    if (eventsButton) {
+        const eventCount = dashboardData.events?.length || 0;
+        eventsButton.textContent = eventCount ? `View Events (${eventCount})` : 'View Events';
+    }
+
+    const reportsButton = document.querySelector('.parent-panel-trigger[data-panel="reports"]');
+    if (reportsButton) {
+        const attendanceRate = dashboardData.reports?.attendance;
+        reportsButton.textContent = attendanceRate
+            ? `View Reports (${attendanceRate})`
+            : 'View Reports';
+    }
+
+    const loginAnnouncement = document.getElementById('parent-login-announcement');
+    if (loginAnnouncement) {
+        loginAnnouncement.textContent = formatParentLoginAnnouncement();
+    }
+
+    if (parentPanelState.activePanel !== 'default') {
+        renderActiveParentPanel();
+    }
+
+    initializeParentDashboardControls();
+
+    console.log('Parent dashboard updated with fresh data:', dashboardData);
+}
+
+// --- MARKETPLACE, CART, AND ORDER SUPPORT ---
+
+const PRODUCT_CATEGORIES = [
+    { id: 'all', name: 'All Resources', icon: '🛒' },
+    { id: 'lesson-kits', name: 'Lesson Kits', icon: '🎒' },
+    { id: 'family-devotions', name: 'Family Devotions', icon: '🏡' },
+    { id: 'worship', name: 'Worship & Music', icon: '🎵' },
+    { id: 'crafts', name: 'Creative Crafts', icon: '🎨' },
+    { id: 'seasonal', name: 'Seasonal Specials', icon: '✨' }
+];
+
+const PRODUCT_CATALOG = [
+    {
+        id: 'advent-story-kit',
+        name: 'Advent Storytelling Kit',
+        category: 'seasonal',
+        price: 34.0,
+        rank: 1,
+        description: 'Includes 4 weeks of family devotions, ornament crafts, and candle lighting prompts.',
+        summary: 'Four-week family journey with printable ornaments.',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Family reading an advent story together'
+    },
+    {
+        id: 'faith-family-box',
+        name: 'Faith at Home Family Box',
+        category: 'family-devotions',
+        price: 48.0,
+        rank: 2,
+        description: 'Monthly box with table talk cards, scripture posters, and faith-building games.',
+        summary: 'Keeps discipleship simple for busy families.',
+        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Family gathered around the table with crafts'
+    },
+    {
+        id: 'praise-card-pack',
+        name: 'Kids Praise Card Pack',
+        category: 'worship',
+        price: 12.5,
+        rank: 3,
+        description: '20 illustrated cards with motion cues and memory verses for worship time.',
+        summary: 'Perfect for small group worship warm-ups.',
+        image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Child singing with colorful cards'
+    },
+    {
+        id: 'craft-celebration-bundle',
+        name: 'Celebration Craft Bundle',
+        category: 'crafts',
+        price: 27.0,
+        rank: 4,
+        description: 'Bulk pack of 10 themed crafts with templates and supply lists for class use.',
+        summary: 'Ready-to-go crafts for your entire classroom.',
+        image: 'https://images.unsplash.com/photo-1505685296765-3a2736de412f?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Children cutting paper crafts at a table'
+    },
+    {
+        id: 'memory-verse-poster-set',
+        name: 'Memory Verse Poster Set',
+        category: 'lesson-kits',
+        price: 22.0,
+        rank: 5,
+        description: 'Set of 12 laminated posters with monthly themes and discussion prompts.',
+        summary: 'Bright visuals for classrooms and hallways.',
+        image: 'https://images.unsplash.com/photo-1529074963764-98f45c47344b?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Colorful posters on a classroom wall'
+    },
+    {
+        id: 'worship-playlist-bundle',
+        name: 'Worship Playlist + Motions Bundle',
+        category: 'worship',
+        price: 18.0,
+        rank: 6,
+        description: 'Downloadable MP3s, lyric slides, and motion tutorial videos for 8 upbeat songs.',
+        summary: 'Instant energy for large group sessions.',
+        image: 'https://images.unsplash.com/photo-1484976063837-eab657a7d0f5?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Kids dancing with music in a classroom'
+    },
+    {
+        id: 'weekend-lesson-kit',
+        name: 'Weekend Lesson Kit: Acts & Adventure',
+        category: 'lesson-kits',
+        price: 39.0,
+        rank: 7,
+        description: 'Complete weekend plan with scripts, slides, small group guides, and parent handouts.',
+        summary: 'One download covers large group and small group.',
+        image: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Teacher reading a Bible story to children'
+    },
+    {
+        id: 'milestone-celebration-set',
+        name: 'Milestone Celebration Set',
+        category: 'seasonal',
+        price: 42.0,
+        rank: 8,
+        description: 'Baptism and child dedication celebration guide with certificates, banners, and gifts.',
+        summary: 'Helps families mark spiritual milestones together.',
+        image: 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Celebration table with cupcakes and decorations'
+    },
+    {
+        id: 'leader-starter-pack',
+        name: 'Small Group Leader Starter Pack',
+        category: 'family-devotions',
+        price: 69.0,
+        rank: 9,
+        description: 'Training workbook, coaching videos, and first-month supplies for new volunteers.',
+        summary: 'Everything new leaders need for confident starts.',
+        image: 'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?auto=format&fit=crop&w=900&q=80',
+        imageAlt: 'Volunteers planning with notebooks and coffee'
+    }
+];
+
+let cartItems = [];
+let activeProductCategory = 'all';
+let pendingOrderRecord = null;
+let lastCompletedOrder = null;
+
+let ORDER_HISTORY = [
+    {
+        id: 'BCC-24001',
+        name: 'Jennifer Smith',
+        email: 'parent@demo.com',
+        status: 'Out for Delivery',
+        placedOn: '2025-10-02T14:30:00Z',
+        estimatedDelivery: '2025-10-10T16:00:00Z',
+        total: 73.0,
+        items: [
+            { name: 'Faith at Home Family Box', quantity: 1, price: 48.0 },
+            { name: 'Kids Praise Card Pack', quantity: 2, price: 12.5 }
+        ],
+        statusHistory: [
+            { label: 'Out for delivery', timestamp: '2025-10-09T14:20:00Z' },
+            { label: 'Departed fulfillment center', timestamp: '2025-10-08T09:00:00Z' },
+            { label: 'Payment received', timestamp: '2025-10-02T14:35:00Z' },
+            { label: 'Order confirmed', timestamp: '2025-10-02T14:31:00Z' },
+            { label: 'Order placed', timestamp: '2025-10-02T14:30:00Z' }
+        ]
+    },
+    {
+        id: 'BCC-24018',
+        name: 'Michael Johnson',
+        email: 'teacher@demo.com',
+        status: 'Processing',
+        placedOn: '2025-10-05T18:05:00Z',
+        estimatedDelivery: '2025-10-12T20:00:00Z',
+        total: 123.0,
+        items: [
+            { name: 'Weekend Lesson Kit: Acts & Adventure', quantity: 2, price: 39.0 },
+            { name: 'Celebration Craft Bundle', quantity: 1, price: 27.0 },
+            { name: 'Worship Playlist + Motions Bundle', quantity: 1, price: 18.0 }
+        ],
+        statusHistory: [
+            { label: 'Preparing for shipment', timestamp: '2025-10-06T09:10:00Z' },
+            { label: 'Payment received', timestamp: '2025-10-05T18:06:00Z' },
+            { label: 'Order confirmed', timestamp: '2025-10-05T18:05:30Z' }
+        ]
+    }
+];
+
+function initializeMarketplace() {
+    if (!document.getElementById('product-grid')) {
+        return;
+    }
+
+    renderProductCategories();
+    filterProducts();
+    renderCart();
+    updateCartCount();
+}
+
+function renderProductCategories() {
+    const container = document.getElementById('product-category-buttons');
+    if (!container) return;
+
+    const buttonsHtml = PRODUCT_CATEGORIES.map(category => {
+        const isActive = category.id === activeProductCategory;
+        return `<button type="button" class="${isActive ? 'active' : ''}" data-category="${category.id}">${category.icon} ${category.name}</button>`;
+    }).join('');
+
+    container.innerHTML = buttonsHtml;
+
+    container.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => {
+            activeProductCategory = button.dataset.category || 'all';
+            renderProductCategories();
+            filterProducts();
+        });
+    });
+}
+
+function getCategoryName(categoryId) {
+    return PRODUCT_CATEGORIES.find(category => category.id === categoryId)?.name || 'Resource';
+}
+
+function getCategoryIcon(categoryId) {
+    return PRODUCT_CATEGORIES.find(category => category.id === categoryId)?.icon || '🛍️';
+}
+
+function renderProductCatalog() {
+    filterProducts();
+}
+
+function filterProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+
+    const searchTerm = (document.getElementById('product-search')?.value || '').trim().toLowerCase();
+    const sortValue = document.getElementById('product-sort')?.value || 'featured';
+
+    let filteredProducts = PRODUCT_CATALOG.filter(product => {
+        const matchesCategory = activeProductCategory === 'all' || product.category === activeProductCategory;
+        const matchesSearch = !searchTerm || product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+    });
+
+    if (sortValue === 'price-asc') {
+        filteredProducts.sort((a, b) => a.price - b.price);
+    } else if (sortValue === 'price-desc') {
+        filteredProducts.sort((a, b) => b.price - a.price);
+    } else {
+        filteredProducts.sort((a, b) => a.rank - b.rank);
+    }
+
+    if (!filteredProducts.length) {
+        grid.innerHTML = '<div class="empty-state">No products match your filters yet. Try another search or category.</div>';
+        return;
+    }
+
+    const html = filteredProducts.map(product => `
+        <article class="product-card">
+            <img src="${product.image}" alt="${product.imageAlt || product.name}" loading="lazy">
+            <div class="product-card-body">
+                <span class="product-category">${getCategoryIcon(product.category)} ${getCategoryName(product.category)}</span>
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <div class="product-card-footer">
+                    <span class="product-price">${formatCurrency(product.price)}</span>
+                    <button type="button" class="btn add-to-cart" data-product-id="${product.id}">Add to Cart</button>
+                </div>
+            </div>
+        </article>
+    `).join('');
+
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', event => {
+            const productId = event.currentTarget.getAttribute('data-product-id');
+            addToCart(productId);
+        });
+    });
+}
+
+function getProductById(productId) {
+    return PRODUCT_CATALOG.find(product => product.id === productId) || null;
+}
+
+function addToCart(productId) {
+    const product = getProductById(productId);
+    if (!product) return;
+
+    const existing = cartItems.find(item => item.productId === productId);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cartItems.push({ productId, quantity: 1 });
+    }
+
+    renderCart();
+    updateCartCount();
+    resetOrderConfirmationMessage();
+    hidePaymentPanel();
+    showToast(`${product.name} added to your cart.`);
+}
+
+function removeFromCart(productId) {
+    cartItems = cartItems.filter(item => item.productId !== productId);
+    renderCart();
+    updateCartCount();
+    resetOrderConfirmationMessage();
+    hidePaymentPanel();
+}
+
+function updateCartQuantity(productId, quantity) {
+    const cartItem = cartItems.find(item => item.productId === productId);
+    if (!cartItem) return;
+
+    cartItem.quantity = quantity;
+
+    if (cartItem.quantity <= 0) {
+        removeFromCart(productId);
+    } else {
+        renderCart();
+        updateCartCount();
+    }
+    resetOrderConfirmationMessage();
+    hidePaymentPanel();
+}
+
+function resetOrderConfirmationMessage() {
+    const message = document.getElementById('order-confirmation-message');
+    if (message) {
+        message.textContent = '';
+        message.classList.remove('error');
+    }
+}
+
+function renderCart() {
+    const list = document.getElementById('cart-item-list');
+    const emptyState = document.getElementById('cart-empty');
+    if (!list || !emptyState) return;
+
+    if (!cartItems.length) {
+        list.innerHTML = '';
+        emptyState.style.display = 'block';
+    } else {
+        emptyState.style.display = 'none';
+        list.innerHTML = cartItems.map(item => {
+            const product = getProductById(item.productId);
+            if (!product) return '';
+            return `
+                <li class="cart-item" data-product-id="${product.id}">
+                    <img src="${product.image}" alt="${product.imageAlt || product.name}">
+                    <div class="cart-item-details">
+                        <h4>${product.name}</h4>
+                        <p class="cart-item-meta">${product.summary}</p>
+                        <div class="cart-item-controls">
+                            <label class="sr-only" for="cart-qty-${product.id}">Quantity for ${product.name}</label>
+                            <input type="number" id="cart-qty-${product.id}" class="cart-quantity-input" data-product-id="${product.id}" min="1" value="${item.quantity}">
+                            <button type="button" class="btn btn-secondary cart-remove" data-product-id="${product.id}">Remove</button>
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        <span>${formatCurrency(product.price)} each</span>
+                        <span>${formatCurrency(product.price * item.quantity)}</span>
+                    </div>
+                </li>
+            `;
+        }).join('');
+
+        list.querySelectorAll('.cart-quantity-input').forEach(input => {
+            input.addEventListener('change', handleCartQuantityChange);
+            input.addEventListener('input', handleCartQuantityChange);
+        });
+
+        list.querySelectorAll('.cart-remove').forEach(button => {
+            button.addEventListener('click', event => {
+                const productId = event.currentTarget.getAttribute('data-product-id');
+                removeFromCart(productId);
+            });
+        });
+    }
+
+    renderCartSummary();
+    updateConfirmButtonState();
+}
+
+function handleCartQuantityChange(event) {
+    const input = event.currentTarget;
+    const productId = input.getAttribute('data-product-id');
+    if (!productId) return;
+
+    const quantity = parseInt(input.value, 10);
+    if (Number.isNaN(quantity) || quantity < 1) {
+        input.value = '1';
+        updateCartQuantity(productId, 1);
+        return;
+    }
+
+    updateCartQuantity(productId, quantity);
+}
+
+function renderCartSummary() {
+    const totals = calculateCartTotals();
+
+    const itemsLabel = document.getElementById('cart-items-count');
+    if (itemsLabel) {
+        itemsLabel.textContent = totals.itemCount === 1 ? '1 item' : `${totals.itemCount} items`;
+    }
+
+    const subtotalEl = document.getElementById('cart-subtotal');
+    if (subtotalEl) subtotalEl.textContent = formatCurrency(totals.subtotal);
+
+    const taxEl = document.getElementById('cart-tax');
+    if (taxEl) taxEl.textContent = formatCurrency(totals.tax);
+
+    const shippingEl = document.getElementById('cart-shipping');
+    if (shippingEl) shippingEl.textContent = totals.shipping === 0 ? 'Free' : formatCurrency(totals.shipping);
+
+    const totalEl = document.getElementById('cart-total');
+    if (totalEl) totalEl.textContent = formatCurrency(totals.total);
+}
+
+function formatCurrency(amount) {
+    const value = Number(amount) || 0;
+    return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function calculateCartTotals() {
+    const subtotal = cartItems.reduce((sum, item) => {
+        const product = getProductById(item.productId);
+        return sum + (product ? product.price * item.quantity : 0);
+    }, 0);
+
+    const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
+    const tax = subtotal * 0.07;
+    const shipping = subtotal === 0 || subtotal >= 75 ? 0 : 6.5;
+    const total = subtotal + tax + shipping;
+
+    return {
+        subtotal,
+        tax,
+        shipping,
+        total,
+        itemCount
+    };
+}
+
+function updateCartCount() {
+    const badge = document.getElementById('cart-count');
+    if (!badge) return;
+
+    const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
+    if (itemCount > 0) {
+        badge.hidden = false;
+        badge.textContent = itemCount;
+    } else {
+        badge.hidden = true;
+    }
+}
+
+function updateConfirmButtonState() {
+    const confirmBtn = document.getElementById('cart-confirm');
+    if (!confirmBtn) return;
+
+    const emailInput = document.getElementById('checkout-email');
+    const emailValue = emailInput?.value.trim() || '';
+    const hasValidEmail = !emailValue || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+    confirmBtn.disabled = cartItems.length === 0 || !hasValidEmail || !emailValue;
+}
+
+function handleCartRecalculate(event) {
+    event.preventDefault();
+    renderCartSummary();
+    updateConfirmButtonState();
+    showToast('Cart totals updated.');
+}
+
+function generateOrderId() {
+    const dateSegment = new Date().toISOString().slice(2, 10).replace(/-/g, '');
+    const randomSegment = Math.floor(100 + Math.random() * 900);
+    return `BCC-${dateSegment}-${randomSegment}`;
+}
+
+function showPaymentPanel(orderId, amount) {
+    const panel = document.getElementById('payment-panel');
+    if (!panel) return;
+
+    panel.hidden = false;
+
+    const orderIdField = document.getElementById('payment-order-id');
+    if (orderIdField) orderIdField.textContent = orderId;
+
+    const amountField = document.getElementById('payment-amount');
+    if (amountField) amountField.textContent = formatCurrency(amount);
+
+    const submitAmount = document.getElementById('payment-submit-amount');
+    if (submitAmount) submitAmount.textContent = formatCurrency(amount);
+
+    const feedback = document.getElementById('payment-feedback');
+    if (feedback) feedback.textContent = '';
+
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) paymentForm.reset();
+}
+
+function hidePaymentPanel() {
+    const panel = document.getElementById('payment-panel');
+    if (panel) {
+        panel.hidden = true;
+    }
+}
+
+function handleOrderConfirm() {
+    if (!cartItems.length) {
+        showToast('Add items to your cart before confirming.', true);
+        return;
+    }
+
+    const emailInput = document.getElementById('checkout-email');
+    const nameInput = document.getElementById('checkout-name');
+    const message = document.getElementById('order-confirmation-message');
+
+    if (!emailInput || !message) return;
+
+    const email = emailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        message.textContent = 'Enter a valid email address so we can send your receipt and tracking updates.';
+        message.classList.add('error');
+        emailInput.focus();
+        return;
+    }
+
+    const contactName = nameInput?.value.trim() || 'BCC Kids Family';
+    const totals = calculateCartTotals();
+    const orderId = generateOrderId();
+    const estimatedDelivery = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+
+    const orderItems = cartItems.map(item => {
+        const product = getProductById(item.productId);
+        return {
+            productId: item.productId,
+            name: product?.name || 'Resource',
+            quantity: item.quantity,
+            price: product?.price || 0
+        };
+    });
+
+    pendingOrderRecord = {
+        id: orderId,
+        name: contactName,
+        email,
+        status: 'Awaiting Payment',
+        placedOn: new Date().toISOString(),
+        estimatedDelivery: estimatedDelivery.toISOString(),
+        total: totals.total,
+        items: orderItems,
+        statusHistory: [
+            { label: 'Awaiting payment', timestamp: new Date().toISOString() },
+            { label: 'Order created', timestamp: new Date().toISOString() }
+        ]
+    };
+
+    ORDER_HISTORY = [
+        pendingOrderRecord,
+        ...ORDER_HISTORY.filter(order => order.id !== pendingOrderRecord.id)
+    ];
+
+    message.textContent = `Order ${orderId} is reserved for ${formatCurrency(totals.total)}. Please complete payment below to finalize your shipment.`;
+    message.classList.remove('error');
+
+    showPaymentPanel(orderId, totals.total);
+    showToast('Order confirmed! Complete payment to finish checkout.');
+}
+
+function handlePaymentSubmit(event) {
+    event.preventDefault();
+
+    if (!pendingOrderRecord) {
+        showToast('Confirm your order before submitting payment.', true);
+        return;
+    }
+
+    const timestamp = new Date().toISOString();
+    pendingOrderRecord.status = 'Payment received - preparing for shipment';
+    pendingOrderRecord.statusHistory = [
+        { label: 'Payment received', timestamp },
+        ...pendingOrderRecord.statusHistory
+    ];
+
+    ORDER_HISTORY = ORDER_HISTORY.map(order =>
+        order.id === pendingOrderRecord.id
+            ? {
+                ...pendingOrderRecord,
+                items: pendingOrderRecord.items.map(item => ({ ...item })),
+                statusHistory: pendingOrderRecord.statusHistory.map(entry => ({ ...entry }))
+            }
+            : order
+    );
+
+    const feedback = document.getElementById('payment-feedback');
+    if (feedback) {
+        feedback.textContent = `Payment received! A receipt will be sent to ${pendingOrderRecord.email}.`;
+    }
+
+    lastCompletedOrder = {
+        ...pendingOrderRecord,
+        items: pendingOrderRecord.items.map(item => ({ ...item })),
+        statusHistory: pendingOrderRecord.statusHistory.map(entry => ({ ...entry }))
+    };
+
+    cartItems = [];
+    renderCart();
+    updateCartCount();
+    updateConfirmButtonState();
+    hidePaymentPanel();
+    resetOrderConfirmationMessage();
+
+    showToast('Payment processed successfully!');
+
+    setTimeout(() => {
+        showPage('order-status');
+        if (lastCompletedOrder) {
+            renderOrderStatusResult(lastCompletedOrder);
+            const orderInput = document.getElementById('order-status-id');
+            if (orderInput) {
+                orderInput.value = lastCompletedOrder.id;
+            }
+            const emailInput = document.getElementById('order-status-email');
+            if (emailInput) {
+                emailInput.value = lastCompletedOrder.email;
+            }
+        }
+    }, 900);
+
+    pendingOrderRecord = null;
+}
+
+function handleOrderStatusLookup(event) {
+    event.preventDefault();
+
+    const orderIdInput = document.getElementById('order-status-id');
+    const emailInput = document.getElementById('order-status-email');
+
+    if (!orderIdInput) return;
+
+    const orderId = orderIdInput.value.trim();
+    const email = emailInput?.value.trim() || '';
+
+    const order = findOrderRecord(orderId, email);
+    renderOrderStatusResult(order);
+}
+
+function findOrderRecord(orderId, email) {
+    if (!orderId) return null;
+
+    const normalizedId = orderId.replace(/\s+/g, '').toUpperCase();
+    const normalizedEmail = email.trim().toLowerCase();
+
+    return ORDER_HISTORY.find(order => {
+        const matchesId = order.id.replace(/\s+/g, '').toUpperCase() === normalizedId;
+        const matchesEmail = !normalizedEmail || order.email?.toLowerCase() === normalizedEmail;
+        return matchesId && matchesEmail;
+    }) || null;
+}
+
+function renderOrderStatusResult(order) {
+    const container = document.getElementById('order-status-result');
+    if (!container) return;
+
+    if (!order) {
+        container.innerHTML = `
+            <div class="order-status-placeholder error">
+                <h3>We couldn't find that order</h3>
+                <p>Double-check your confirmation number and email, then try again or start a chat with our support team.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const itemsMarkup = (order.items || []).map(item => `
+        <li>
+            <span>${item.quantity} × ${item.name}</span>
+            <span>${formatCurrency(item.price * item.quantity)}</span>
+        </li>
+    `).join('');
+
+    const timelineMarkup = (order.statusHistory || []).map(entry => `
+        <li>
+            <span>${entry.label}</span>
+            <time>${formatOrderTimestamp(entry.timestamp)}</time>
+        </li>
+    `).join('');
+
+    container.innerHTML = `
+        <div class="order-status-card">
+            <h3>Order ${order.id}</h3>
+            <p class="order-status-current"><strong>Status:</strong> ${order.status || 'Processing'}</p>
+            <dl>
+                <div><dt>Placed</dt><dd>${formatOrderDate(order.placedOn)}</dd></div>
+                <div><dt>Contact</dt><dd>${order.name || '—'}</dd></div>
+                <div><dt>Total</dt><dd>${formatCurrency(order.total)}</dd></div>
+                <div><dt>Est. Delivery</dt><dd>${formatOrderDate(order.estimatedDelivery)}</dd></div>
+            </dl>
+            <h4>Items</h4>
+            <ul class="order-item-list">${itemsMarkup}</ul>
+            <h4>Recent Updates</h4>
+            <ol class="order-status-timeline">${timelineMarkup}</ol>
+        </div>
+    `;
+}
+
+function formatOrderDate(value) {
+    const date = parseOrderDate(value);
+    if (!date) return '—';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatOrderTimestamp(value) {
+    const date = parseOrderDate(value);
+    if (!date) return '';
+    return date.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+function parseOrderDate(value) {
+    if (!value) return null;
+    const date = value instanceof Date ? value : new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatChatTimestamp(value) {
+    const date = parseOrderDate(value);
+    if (!date) return '';
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+const CUSTOMER_CHAT_OPENERS = [
+    'Hi there! 👋 I\'m Grace from the BCC Kids store. How can I help with your order today?',
+    'Ask me about order status, curriculum bundles, or payment questions and I\'ll get you quick answers.'
+];
+
+let customerChatInitialized = false;
+let customerChatTranscript = [];
+
+function renderCustomerChat() {
+    const chatWindow = document.getElementById('customer-chat-window');
+    if (!chatWindow) return;
+
+    if (!customerChatTranscript.length) {
+        chatWindow.innerHTML = '<p class="chat-placeholder">Start a conversation and our team will jump in shortly.</p>';
+        return;
+    }
+
+    chatWindow.innerHTML = customerChatTranscript.map(message => `
+        <div class="chat-message ${message.sender === 'agent' ? 'agent' : 'customer'}">
+            <p>${message.text}</p>
+            <time>${formatChatTimestamp(message.timestamp)}</time>
+        </div>
+    `).join('');
+
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function initializeCustomerChat() {
+    const chatWindow = document.getElementById('customer-chat-window');
+    if (!chatWindow) return;
+
+    if (!customerChatInitialized) {
+        customerChatTranscript = CUSTOMER_CHAT_OPENERS.map(text => ({
+            sender: 'agent',
+            text,
+            timestamp: new Date().toISOString()
+        }));
+        customerChatInitialized = true;
+    }
+
+    renderCustomerChat();
+}
+
+function appendCustomerChatMessage(sender, text) {
+    customerChatTranscript.push({
+        sender,
+        text,
+        timestamp: new Date().toISOString()
+    });
+    renderCustomerChat();
+}
+
+function handleCustomerChatSubmit(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('customer-chat-input');
+    if (!input) return;
+
+    const messageText = input.value.trim();
+    if (!messageText) return;
+
+    appendCustomerChatMessage('customer', messageText);
+    input.value = '';
+    input.focus();
+
+    setTimeout(() => {
+        appendCustomerChatMessage('agent', getAutomatedChatReply(messageText));
+    }, 650);
+}
+
+function getAutomatedChatReply(messageText) {
+    const normalized = messageText.toLowerCase();
+
+    if (normalized.includes('shipping') || normalized.includes('delivery')) {
+        return 'Shipping update: orders leave our Indiana hub within 2 business days. You\'ll receive tracking via email as soon as a label is created.';
+    }
+
+    if (normalized.includes('status') || normalized.includes('order')) {
+        return 'To check status quickly, enter your confirmation number on the Order Status tab. I can look it up for you if you share the number here too!';
+    }
+
+    if (normalized.includes('payment') || normalized.includes('card')) {
+        return 'All payments are processed securely. We accept major cards and church purchase orders—just let us know if you need an invoice.';
+    }
+
+    if (normalized.includes('bulk') || normalized.includes('discount')) {
+        return 'Great news—orders of 10 or more kits automatically receive tiered discounts in the cart. I can build a custom quote if you share quantities.';
+    }
+
+    return 'Thanks for reaching out! A team member will join the conversation shortly. Meanwhile, let me know your order number or question and we\'ll get it handled.';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMarketplace();
+
+    const recalcBtn = document.getElementById('cart-recalculate');
+    if (recalcBtn) {
+        recalcBtn.addEventListener('click', handleCartRecalculate);
+    }
+
+    const confirmBtn = document.getElementById('cart-confirm');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', handleOrderConfirm);
+    }
+
+    const paymentForm = document.getElementById('payment-form');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', handlePaymentSubmit);
+    }
+
+    const orderStatusForm = document.getElementById('order-status-form');
+    if (orderStatusForm) {
+        orderStatusForm.addEventListener('submit', handleOrderStatusLookup);
+    }
+
+    const checkoutEmail = document.getElementById('checkout-email');
+    if (checkoutEmail) {
+        checkoutEmail.addEventListener('input', updateConfirmButtonState);
+    }
+
+    const chatForm = document.getElementById('customer-chat-form');
+    if (chatForm) {
+        chatForm.addEventListener('submit', handleCustomerChatSubmit);
+    }
+});
+
+function handleParentChatSubmit() {
 function updateParentDashboardUI(dashboardData) {
     if (!dashboardData) return;
 
